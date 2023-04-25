@@ -1,0 +1,986 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+  <meta charset="UTF-8">
+  <meta 
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+  <meta 
+    http-equiv="X-UA-Compatible" 
+    content="ie=edge">
+  <meta 
+    name="theme-color" 
+    content="#fff" 
+    id="theme-color">
+  <meta 
+    name="description" 
+    content="Hexo">
+  <link 
+    rel="icon" 
+    href="/">
+  <title>React概述</title>
+  
+    
+      <meta 
+        property="og:title" 
+        content="React概述">
+    
+    
+      <meta 
+        property="og:url" 
+        content="http://example.com/2023/04/24/01-React%20%E5%9F%BA%E7%A1%80/index.html">
+    
+    
+      <meta 
+        property="og:img" 
+        content="https://img.songhn.com/img/Y67gdd.png">
+    
+    
+    
+      <meta 
+        property="og:type" 
+        content="article">
+      <meta 
+        property="og:article:published_time" 
+        content="2023-04-24">
+      <meta 
+        property="og:article:modified_time" 
+        content="2023-04-24">
+      <meta 
+        property="og:article:author" 
+        content="theme-kaze">
+      
+        
+      
+    
+  
+  
+  <link rel="preload" href="//at.alicdn.com/t/font_1946621_i1kgafibvw.css" as="style" >
+  <link rel="preload" href="//at.alicdn.com/t/font_1952792_89b4ac4k4up.css" as="style" >
+  <link rel="preload" href="/css/main.css" as="style" >
+  
+  <link rel="modulepreload" href="//instant.page/5.1.0">
+  
+  <link rel="stylesheet" href="/css/main.css">
+  
+  <link rel="stylesheet" href="//at.alicdn.com/t/font_1946621_i1kgafibvw.css">
+  
+  <link rel="stylesheet" href="//at.alicdn.com/t/font_1952792_89b4ac4k4up.css">
+  
+  
+  
+    <link rel="stylesheet" href="/js/lib/lightbox/baguetteBox.min.css">
+  
+  <script>
+    function loadScript(url, cb) {
+      var script = document.createElement('script');
+      script.src = url;
+      if (cb) script.onload = cb;
+      script.async = true;
+      document.body.appendChild(script);
+    }
+    function loadCSS(href, data, attr) {
+      var sheet = document.createElement('link');
+      sheet.ref = 'stylesheet';
+      sheet.href = href;
+      sheet.dataset[data] = attr;
+      document.head.appendChild(sheet);
+    }
+    function changeCSS(cssFile, data, attr) {
+      var oldlink = document.querySelector(data);
+      var newlink = document.createElement("link");
+      newlink.setAttribute("rel", "stylesheet");
+      newlink.setAttribute("href", cssFile);
+      newlink.dataset.prism = attr;
+      document.head.replaceChild(newlink, oldlink);
+    }
+  </script>
+  
+    
+  
+  <script>
+    // control reverse button
+    var reverseDarkList = {
+      dark: 'light',
+      light: 'dark'
+    };
+    var themeColor = {
+      dark: '#1c1c1e',
+      light: '#fff'
+    }
+    // get the data of css prefers-color-scheme
+    var getCssMediaQuery = function() {
+      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    };
+    // reverse current darkmode setting function
+    var reverseDarkModeSetting = function() {
+      var setting = localStorage.getItem('user-color-scheme');
+      if(reverseDarkList[setting]) {
+        setting = reverseDarkList[setting];
+      } else if(setting === null) {
+        setting = reverseDarkList[getCssMediaQuery()];
+      } else {
+        return;
+      }
+      localStorage.setItem('user-color-scheme', setting);
+      return setting;
+    };
+    // apply current darkmode setting
+  </script>
+  
+    <script>
+      var setDarkmode = function(mode) {
+      var setting = mode || localStorage.getItem('user-color-scheme');
+      if(setting === getCssMediaQuery()) {
+        document.documentElement.removeAttribute('data-user-color-scheme');
+        localStorage.removeItem('user-color-scheme');
+        document.getElementById('theme-color').content = themeColor[setting];
+        document.getElementById('theme-color').dataset.mode = setting;
+      } else if(reverseDarkList[setting]) {
+        document.documentElement.setAttribute('data-user-color-scheme', setting);
+        document.getElementById('theme-color').content = themeColor[setting];
+        document.getElementById('theme-color').dataset.mode = setting;
+      } else {
+        document.documentElement.removeAttribute('data-user-color-scheme');
+        localStorage.removeItem('user-color-scheme');
+        document.getElementById('theme-color').content = themeColor[getCssMediaQuery()];
+        document.getElementById('theme-color').dataset.mode = getCssMediaQuery();
+      }
+    };
+    setDarkmode();
+    </script>
+  
+  
+  
+    <link rel="preload" href="/js/lib/lightbox/baguetteBox.min.js" as="script">
+    <link rel="preload" href="/js/lib/lightbox/baguetteBox.min.css" as="style" >
+  
+  
+    <link rel="preload" href="/js/lib/lozad.min.js" as="script">
+  
+  
+  
+  
+  
+  
+<meta name="generator" content="Hexo 5.4.2"><link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+</head>
+
+  <body>
+    <div class="wrapper">
+       
+      <nav class="navbar">
+  <div class="navbar-logo">
+    <a class="navbar-logo-main" href="/">
+      
+      <span class="navbar-logo-dsc">Theme Kaze</span>
+      </a>
+  </div>
+  <div class="navbar-menu">
+    
+      <a 
+        href="/" 
+        class="navbar-menu-item">
+        
+          首页
+        
+      </a>
+    
+      <a 
+        href="/archives" 
+        class="navbar-menu-item">
+        
+          归档
+        
+      </a>
+    
+      <a 
+        href="/tags" 
+        class="navbar-menu-item">
+        
+          标签
+        
+      </a>
+    
+      <a 
+        href="/categories" 
+        class="navbar-menu-item">
+        
+          分类
+        
+      </a>
+    
+      <a 
+        href="/about" 
+        class="navbar-menu-item">
+        
+          关于
+        
+      </a>
+    
+      <a 
+        href="/links" 
+        class="navbar-menu-item">
+        
+          友链
+        
+      </a>
+    
+    <button 
+      class="navbar-menu-item darknavbar navbar-menu-btn" 
+      aria-label="Toggle dark mode"
+      id="dark">
+      <i class="iconfont icon-weather"></i>
+    </button>
+    <button 
+      class="navbar-menu-item searchnavbar navbar-menu-btn" 
+      aria-label="Toggle search"
+      id="search">
+      <!-- <i 
+        class="iconfont icon-search" 
+        style="font-size: 1.2rem; font-weight: 400;">
+      </i> -->
+      <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img"
+        class="iconify iconify--ion" width="28" height="28" preserveAspectRatio="xMidYMid meet" viewBox="0 0 512 512">
+        <path fill="none" stroke="currentColor" stroke-miterlimit="10" stroke-width="28"
+          d="M256 80a176 176 0 1 0 176 176A176 176 0 0 0 256 80Z"></path>
+        <path fill="none" stroke="currentColor" stroke-miterlimit="10" stroke-width="28"
+          d="M232 160a72 72 0 1 0 72 72a72 72 0 0 0-72-72Z"></path>
+        <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-miterlimit="10" stroke-width="28"
+          d="M283.64 283.64L336 336"></path>
+      </svg>
+    </button>
+  </div>
+</nav> 
+      
+      <div 
+        id="local-search" 
+        style="display: none">
+        <input
+          class="navbar-menu-item"
+          id="search-input"
+          placeholder="请输入搜索内容..." />
+        <div id="search-content"></div>
+      </div>
+      
+      <div class="section-wrap">
+        <div class="container">
+          <div class="columns">
+            <aside class="left-column">
+              
+              <div class="card card-author">
+                
+  <img 
+    src="https://img.songhn.com/img/Y67gdd.png" 
+    class="author-img"
+    width="88"
+    height="88"
+    alt="author avatar">
+
+<p class="author-name">theme-kaze</p>
+<p class="author-description">designed by theme-kaze</p>
+<div class="author-message">
+  <a 
+    class="author-posts-count" 
+    href="/archives">
+    <span>14</span>
+    <span>文章</span>
+  </a>
+  <a 
+    class="author-categories-count" 
+    href="/categories">
+    <span>3</span>
+    <span>分类</span>
+  </a>
+  <a 
+    class="author-tags-count" 
+    href="/tags">
+    <span>0</span>
+    <span>标签</span>
+  </a>
+</div>
+
+              </div>
+               <div class="sticky-tablet">
+  
+  
+    <article class="display-when-two-columns spacer">
+      <div class="card card-content toc-card">
+        <div class="toc-header">
+  <i 
+    class="iconfont icon-menu" 
+    style="padding-right: 2px;">
+  </i>目录
+</div>
+<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%AF%BE%E7%A8%8B%E5%AE%89%E6%8E%92"><span class="toc-text">课程安排</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#React-%E6%A6%82%E8%BF%B0"><span class="toc-text">React 概述</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AD%A6%E4%B9%A0%E7%9B%AE%E6%A0%87"><span class="toc-text">学习目标</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#React-%E4%BB%8B%E7%BB%8D"><span class="toc-text">React 介绍</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#react%E7%89%B9%E7%82%B9"><span class="toc-text">react特点</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A3%B0%E6%98%8E%E5%BC%8FUI"><span class="toc-text">声明式UI</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BB%84%E4%BB%B6%E5%8C%96"><span class="toc-text">组件化</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AD%A6%E4%B9%A0%E4%B8%80%E6%AC%A1%EF%BC%8C%E9%9A%8F%E5%A4%84%E4%BD%BF%E7%94%A8"><span class="toc-text">学习一次，随处使用</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#React-%E8%84%9A%E6%89%8B%E6%9E%B6%EF%BC%88CLI%EF%BC%89"><span class="toc-text">React 脚手架（CLI）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#React-%E8%84%9A%E6%89%8B%E6%9E%B6%E7%9A%84%E4%BB%8B%E7%BB%8D"><span class="toc-text">React 脚手架的介绍</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8-React-%E8%84%9A%E6%89%8B%E6%9E%B6%E5%88%9B%E5%BB%BA%E9%A1%B9%E7%9B%AE"><span class="toc-text">使用 React 脚手架创建项目</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%A1%B9%E7%9B%AE%E7%9B%AE%E5%BD%95%E7%BB%93%E6%9E%84%E8%AF%B4%E6%98%8E%E5%92%8C%E8%B0%83%E6%95%B4"><span class="toc-text">项目目录结构说明和调整</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#React-%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8"><span class="toc-text">React 的基本使用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9F%BA%E6%9C%AC%E6%AD%A5%E9%AA%A4"><span class="toc-text">基本步骤</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BB%83%E4%B9%A0"><span class="toc-text">练习</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B0%8F%E7%BB%93"><span class="toc-text">小结</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#JSX"><span class="toc-text">JSX</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AD%A6%E4%B9%A0%E7%9B%AE%E6%A0%87-1"><span class="toc-text">学习目标</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#JSX%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8"><span class="toc-text">JSX的基本使用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#createElement%E7%9A%84%E9%97%AE%E9%A2%98"><span class="toc-text">createElement的问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#JSX%E7%AE%80%E4%BB%8B"><span class="toc-text">JSX简介</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E6%AD%A5%E9%AA%A4"><span class="toc-text">使用步骤</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#JSX%E6%B3%A8%E6%84%8F%E7%82%B9"><span class="toc-text">JSX注意点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8prettier%E6%8F%92%E4%BB%B6%E6%A0%BC%E5%BC%8F%E5%8C%96react%E4%BB%A3%E7%A0%81"><span class="toc-text">使用prettier插件格式化react代码</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#JSX%E4%B8%AD%E5%B5%8C%E5%85%A5JavaScript%E8%A1%A8%E8%BE%BE%E5%BC%8F"><span class="toc-text">JSX中嵌入JavaScript表达式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9D%A1%E4%BB%B6%E6%B8%B2%E6%9F%93"><span class="toc-text">条件渲染</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#vscode%E9%85%8D%E7%BD%AE%E8%87%AA%E5%8A%A8%E8%A1%A5%E5%85%A8"><span class="toc-text">vscode配置自动补全</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%97%E8%A1%A8%E6%B8%B2%E6%9F%93"><span class="toc-text">列表渲染</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A0%B7%E5%BC%8F%E5%A4%84%E7%90%86"><span class="toc-text">样式处理</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%A1%8C%E5%86%85%E6%A0%B7%E5%BC%8F-style"><span class="toc-text">行内样式-style</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%B1%BB%E5%90%8D-className"><span class="toc-text">类名-className</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BB%83%E4%B9%A0-1"><span class="toc-text">练习</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-text">总结</span></a></li></ol></li></ol>
+      </div>
+    </article>
+  
+  
+  <article class="card card-content categories-widget">
+    <div class="categories-card">
+  <div class="categories-header">
+    <i 
+      class="iconfont icon-fenlei" 
+      style="padding-right: 2px;">
+    </i>分类
+  </div>
+  <div class="categories-list">
+    
+      <a href="/categories/hooks/">
+        <div class="categories-list-item">
+          hooks
+          <span class="categories-list-item-badge">2</span>
+        </div>
+      </a>
+    
+      <a href="/categories/React/">
+        <div class="categories-list-item">
+          React
+          <span class="categories-list-item-badge">6</span>
+        </div>
+      </a>
+    
+      <a href="/categories/js/">
+        <div class="categories-list-item">
+          js
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+  </div>
+</div>
+  </article>
+  
+  <article class="card card-content tags-widget">
+    <div class="tags-card">
+  <div class="tags-header">
+    <i 
+      class="iconfont icon-biaoqian" 
+      style="padding-right: 2px;">
+    </i>热门标签
+  </div>
+  <div class="tags-list">
+    
+  </div>
+</div>
+  </article>
+  
+  
+</div>
+            </aside>
+            <main class="main-column">
+              
+<article class="card card-content">
+  <header>
+    <h1 class="post-title">
+      React概述
+    </h1>
+  </header>
+  <div class="post-meta post-show-meta">
+    <time datetime="2023-04-24T11:14:22.757Z">
+      <i 
+        class="iconfont icon-calendar" 
+        style="margin-right: 2px;">
+      </i>
+      <span>2023-04-24</span>
+    </time>
+    
+      <span class="dot"></span>
+      
+        <a 
+          href="/categories/React/" 
+          class="post-meta-link">
+          React
+        </a>
+      
+    
+    
+      <span class="dot"></span>
+      <span>2.7k 字</span>
+    
+  </div>
+  
+  </header>
+  <div 
+    id="section" 
+    class="post-content">
+    <h1 id="课程安排"><a href="#课程安排" class="headerlink" title="课程安排"></a>课程安排</h1><p><img src="images/image-20210816173421106.png" alt="image-20210816173421106" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="images/image-20210816173421106.png" class="lozad post-image"></p>
+<h1 id="React-概述"><a href="#React-概述" class="headerlink" title="React 概述"></a>React 概述</h1><h2 id="学习目标"><a href="#学习目标" class="headerlink" title="学习目标"></a>学习目标</h2><ul>
+<li>能够说出react是什么</li>
+<li>能够说出react的特点</li>
+<li>能够掌握react的基本用法</li>
+<li>能够使用react脚手架</li>
+</ul>
+<h2 id="React-介绍"><a href="#React-介绍" class="headerlink" title="React 介绍"></a>React 介绍</h2><p><img src="./images/react_logo.jpeg" alt="React Logo" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="./images/react_logo.jpeg" class="lozad post-image"></p>
+<blockquote>
+<p>react是一个用于构建用户<strong>界面</strong>的 JavaScript 库</p>
+<p>react官网(<a target="_blank" rel="noopener" href="https://reactjs.org/">https://reactjs.org/</a>)</p>
+<p>react中文网(<a target="_blank" rel="noopener" href="https://zh-hans.reactjs.org/">https://zh-hans.reactjs.org/</a>)</p>
+</blockquote>
+<ul>
+<li>React 是一个用于构建用户界面（UI，对咱们前端来说，简单理解为：HTML 页面）的 JavaScript 库</li>
+<li>如果从mvc的角度来看，React仅仅是视图层（V）的解决方案。也就是只负责视图的渲染，并非提供了完整了M和C的功能</li>
+<li>react/react-dom/react-router/redux: 框架</li>
+<li>React 起源于 Facebook 内部项目（News Feed，2011），后又用来架设 Instagram 的网站（2012），并于 2013 年 5 月开源<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/react/18077599?fr=aladdin">react介绍</a></li>
+<li>React 是最流行的前端开发框架之一，其他：Vue、Angular 等等<a target="_blank" rel="noopener" href="https://www.npmtrends.com/">框架对比</a></li>
+</ul>
+<h2 id="react特点"><a href="#react特点" class="headerlink" title="react特点"></a>react特点</h2><h3 id="声明式UI"><a href="#声明式UI" class="headerlink" title="声明式UI"></a>声明式UI</h3><p>你只需要描述UI（HTML）看起来是什么样的，就跟写HTML一样</p>
+<pre class="highlight"><span class="line"><span class="keyword">const</span> jsx = <span class="language-xml"><span class="tag">&lt;<span class="name">div</span> <span class="attr">className</span>=<span class="string">&quot;app&quot;</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">    <span class="tag">&lt;<span class="name">h1</span>&gt;</span>Hello React! 动态数据变化:&#123;count&#125;<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span></span><br><span class="line"><span class="language-xml"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br></pre>
+
+<p>声明式对应的是命令式，声明式关注的是what，命令式关注的是how</p>
+<h3 id="组件化"><a href="#组件化" class="headerlink" title="组件化"></a>组件化</h3><ul>
+<li>组件是react中<strong>最重要</strong>的内容</li>
+<li>组件用于表示页面中的部分内容</li>
+<li>组合、复用多个组件，就可以实现完整的页面功能</li>
+</ul>
+<p><img  srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="images/%E7%BB%84%E4%BB%B6-1629115179921.png" class="lozad post-image"src="images/%E7%BB%84%E4%BB%B6-1629115179921.png"></p>
+<h3 id="学习一次，随处使用"><a href="#学习一次，随处使用" class="headerlink" title="学习一次，随处使用"></a>学习一次，随处使用</h3><ul>
+<li>使用react/rect-dom可以开发Web应用</li>
+<li>使用react/react-native可以开发移动端原生应用（react-native）  RN   安卓 和 ios应用    flutter</li>
+<li>使用react可以开发VR（虚拟现实）应用（react360）</li>
+</ul>
+<p><img  srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="images/react-use-1629115179922.png" class="lozad post-image"src="images/react-use-1629115179922.png"></p>
+<p>从你的角度看 React 特点：</p>
+<ul>
+<li>工资高、大厂必备（阿里在用）</li>
+<li>工资高、大厂必备（字节跳动在用）</li>
+<li>工资高、大厂必备（百度、腾讯、京东、蚂蚁金服、拼多多、美团、外企、银行等都在用）</li>
+</ul>
+<h2 id="React-脚手架（CLI）"><a href="#React-脚手架（CLI）" class="headerlink" title="React 脚手架（CLI）"></a>React 脚手架（CLI）</h2><ul>
+<li>React 脚手架的介绍</li>
+<li>使用 React 脚手架创建项目</li>
+<li>项目目录结构调整</li>
+</ul>
+<h3 id="React-脚手架的介绍"><a href="#React-脚手架的介绍" class="headerlink" title="React 脚手架的介绍"></a>React 脚手架的介绍</h3><ul>
+<li>脚手架：为了保证各施工过程顺利进行而搭设的工作平台</li>
+<li>对于前端项目开发来说，脚手架是为了保证前端项目开发过程顺利进行而搭设的开发平台</li>
+<li>脚手架的意义：<ul>
+<li>现代的前端开发日趋成熟，需要依赖于各种工具，比如，webpack、babel、eslint、sass/less/postcss等</li>
+<li>工具配置繁琐、重复，各项目之间的配置大同小异</li>
+<li>开发阶段、项目发布，配置不同<ul>
+<li>项目开始前，帮你搭好架子，省去繁琐的 webpack 配置</li>
+<li>项目开发时，热更新、格式化代码、git 提交时自动校验代码格式等</li>
+<li>项目发布时，一键自动打包，包括：代码压缩、优化、按需加载等</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="使用-React-脚手架创建项目"><a href="#使用-React-脚手架创建项目" class="headerlink" title="使用 React 脚手架创建项目"></a>使用 React 脚手架创建项目</h3><ul>
+<li>命令：<code>npx create-react-app react-basic</code><ul>
+<li>npx create-react-app 是固定命令，<code>create-react-app</code> 是 React 脚手架的名称</li>
+<li>react-basic 表示项目名称，可以修改</li>
+</ul>
+</li>
+<li>启动项目：<code>yarn start</code> or <code>npm start</code></li>
+<li><code>npx</code> 是 npm v5.2 版本新添加的命令，用来简化 npm 中工具包的使用<ul>
+<li>原始：1 全局安装 <code>npm i -g create-react-app</code> 2 在通过脚手架的命令来创建 React 项目</li>
+<li>现在：npx 调用最新的 create-react-app 直接创建 React 项目</li>
+</ul>
+</li>
+</ul>
+<h3 id="项目目录结构说明和调整"><a href="#项目目录结构说明和调整" class="headerlink" title="项目目录结构说明和调整"></a>项目目录结构说明和调整</h3><ul>
+<li>说明：<ul>
+<li><code>src</code> 目录是我们写代码进行项目开发的目录</li>
+<li>查看 <code>package.json</code> 两个核心库：<code>react</code>、<code>react-dom</code>（脚手架已经帮我们安装好，我们直接用即可）</li>
+</ul>
+</li>
+<li>调整：<ol>
+<li>删除 src 目录下的所有文件</li>
+<li>创建 index.js 文件作为项目的入口文件，在这个文件中写 React 代码即可</li>
+</ol>
+</li>
+</ul>
+<h2 id="React-的基本使用"><a href="#React-的基本使用" class="headerlink" title="React 的基本使用"></a>React 的基本使用</h2><h3 id="基本步骤"><a href="#基本步骤" class="headerlink" title="基本步骤"></a>基本步骤</h3><ul>
+<li>使用步骤</li>
+</ul>
+<pre class="highlight"><span class="line">- 导入react和react-dom   </span><br><span class="line">- 创建react元素(虚拟DOM)</span><br><span class="line">- 渲染react元素到页面中</span><br></pre>
+
+<ul>
+<li>导入react和react-dom</li>
+</ul>
+<pre class="highlight"><span class="line"><span class="comment">// 导入react和react-dom</span></span><br><span class="line"><span class="keyword">import</span> <span class="title class_">React</span> <span class="keyword">from</span> <span class="string">&#x27;react&#x27;</span></span><br><span class="line"><span class="keyword">import</span> <span class="title class_">ReactDOM</span> <span class="keyword">from</span> <span class="string">&#x27;react-dom&#x27;</span></span><br></pre>
+
+<ul>
+<li>创建react元素</li>
+</ul>
+<pre class="highlight"><span class="line"><span class="comment">// 创建元素</span></span><br><span class="line"><span class="keyword">const</span> title = <span class="title class_">React</span>.<span class="title function_">createElement</span>(<span class="string">&#x27;h1&#x27;</span>, <span class="literal">null</span>, <span class="string">&#x27;hello react&#x27;</span>)</span><br></pre>
+
+<ul>
+<li>渲染react元素到页面</li>
+</ul>
+<pre class="highlight"><span class="line"><span class="comment">// 渲染react元素</span></span><br><span class="line"><span class="title class_">ReactDOM</span>.<span class="title function_">render</span>(title, <span class="variable language_">document</span>.<span class="title function_">getElementById</span>(<span class="string">&#x27;root&#x27;</span>))</span><br></pre>
+
+<h3 id="练习"><a href="#练习" class="headerlink" title="练习"></a>练习</h3><ol>
+<li>使用react，生成以下结构</li>
+</ol>
+<pre class="highlight"><span class="line">&lt;div id=<span class="string">&quot;box&quot;</span> <span class="keyword">class</span>=<span class="string">&quot;demo&quot;</span>&gt;这是一个react案例&lt;/div&gt;</span><br></pre>
+
+<ol start="2">
+<li>生成结构2</li>
+</ol>
+<pre class="highlight"><span class="line">&lt;ul <span class="keyword">class</span>=<span class="string">&quot;list&quot;</span>&gt;</span><br><span class="line">    <span class="language-xml"><span class="tag">&lt;<span class="name">li</span>&gt;</span>香蕉<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span></span><br><span class="line">    <span class="language-xml"><span class="tag">&lt;<span class="name">li</span>&gt;</span>橘子<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span></span><br><span class="line">    <span class="language-xml"><span class="tag">&lt;<span class="name">li</span>&gt;</span>苹果<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span></span><br><span class="line">&lt;/ul&gt;</span><br></pre>
+
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><ul>
+<li>能够说出react是什么<ul>
+<li>是用于构建用户界面的javascript库</li>
+</ul>
+</li>
+<li>能够说出react的特点<ul>
+<li>声明式ui</li>
+<li>组件化</li>
+<li>一处学习，多次使用  react-dom  react-native</li>
+</ul>
+</li>
+<li>能够掌握react的基本用法</li>
+<li>能够使用react脚手架<ul>
+<li><code>yarn global add create-react-app</code></li>
+</ul>
+</li>
+</ul>
+<h1 id="JSX"><a href="#JSX" class="headerlink" title="JSX"></a>JSX</h1><h2 id="学习目标-1"><a href="#学习目标-1" class="headerlink" title="学习目标"></a>学习目标</h2><ul>
+<li>能够知道什么是jsx</li>
+<li>能够使用jsx创建react元素</li>
+<li>能够在jsx中使用javascript表达式 <code>&#123;&#125;</code></li>
+<li>能够使用jsx的条件渲染和列表渲染</li>
+<li>能够给jsx添加样式</li>
+</ul>
+<h2 id="JSX的基本使用"><a href="#JSX的基本使用" class="headerlink" title="JSX的基本使用"></a>JSX的基本使用</h2><h3 id="createElement的问题"><a href="#createElement的问题" class="headerlink" title="createElement的问题"></a>createElement的问题</h3><ul>
+<li>繁琐不简洁</li>
+<li>不直观，无法一眼看出所描述的结构</li>
+<li>不优雅，开发体验不好</li>
+</ul>
+<p><img  srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="./images/jsx%E7%9A%84%E4%BC%98%E7%82%B9.png" class="lozad post-image"src="./images/jsx%E7%9A%84%E4%BC%98%E7%82%B9.png"></p>
+<h3 id="JSX简介"><a href="#JSX简介" class="headerlink" title="JSX简介"></a>JSX简介</h3><p><code>JSX</code>是 <code>JavaScript XML</code>的简写，表示了在Javascript代码中写XML(HTML)格式的代码</p>
+<p>优势：声明式语法更加直观，与HTML结构相同，降低学习成本，提高开发效率。</p>
+<p> <strong>JSX是react的核心内容</strong></p>
+<p>注意：<em>JSX 不是标准的 JS 语法，是 JS 的语法扩展。脚手架中内置的 <a href="@babel/plugin-transform-react-jsx">@babel/plugin-transform-react-jsx</a> 包，用来解析该语法。</em></p>
+<p>![JSX 声明式vs命令式](images/JSX 声明式vs命令式-1629116328806.png)</p>
+<h3 id="使用步骤"><a href="#使用步骤" class="headerlink" title="使用步骤"></a>使用步骤</h3><pre class="highlight"><span class="line">- 导入react和reactDOM包</span><br><span class="line">- 使用jsx语法创建react元素</span><br><span class="line">- 把react元素渲染到页面中</span><br></pre>
+
+<ul>
+<li>导入react和reactDOM</li>
+</ul>
+<pre class="highlight"><span class="line"><span class="comment">// 导入react和react-dom</span></span><br><span class="line"><span class="keyword">import</span> <span class="title class_">React</span> <span class="keyword">from</span> <span class="string">&#x27;react&#x27;</span></span><br><span class="line"><span class="keyword">import</span> <span class="title class_">ReactDOM</span> <span class="keyword">from</span> <span class="string">&#x27;react-dom&#x27;</span></span><br></pre>
+
+<ul>
+<li>创建react元素</li>
+</ul>
+<pre class="highlight"><span class="line"><span class="comment">// 创建元素</span></span><br><span class="line"><span class="keyword">const</span> title = <span class="language-xml"><span class="tag">&lt;<span class="name">h1</span> <span class="attr">title</span>=<span class="string">&quot;哈哈&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span></span><br></pre>
+
+<ul>
+<li>渲染元素</li>
+</ul>
+<pre class="highlight"><span class="line"><span class="comment">// 渲染元素</span></span><br><span class="line"><span class="title class_">ReactDOM</span>.<span class="title function_">render</span>(title, <span class="variable language_">document</span>.<span class="title function_">getElementById</span>(<span class="string">&#x27;root&#x27;</span>))</span><br></pre>
+
+<h3 id="JSX注意点"><a href="#JSX注意点" class="headerlink" title="JSX注意点"></a>JSX注意点</h3><ul>
+<li><p>只有在脚手架中才能使用jsx语法</p>
+<ul>
+<li>因为JSX需要经过babel的编译处理，才能在浏览器中使用。脚手架中已经默认有了这个配置。</li>
+</ul>
+</li>
+<li><p>JSX必须要有一个根节点， <code>&lt;&gt;&lt;/&gt;</code>  <code>&lt;React.Fragment&gt;&lt;/React.Fragment&gt;</code></p>
+</li>
+<li><p>没有子节点的元素可以使用 <code>/&gt;</code>结束</p>
+</li>
+<li><p>JSX中语法更接近与JavaScript</p>
+<ul>
+<li><code>class</code> =====&gt; <code>className</code></li>
+<li><code>for</code>========&gt;  <code>htmlFor</code></li>
+</ul>
+</li>
+<li><p>JSX可以换行，如果JSX有多行，推荐使用 <code>()</code>包裹JSX，防止自动插入分号的bug</p>
+</li>
+</ul>
+<h2 id="使用prettier插件格式化react代码"><a href="#使用prettier插件格式化react代码" class="headerlink" title="使用prettier插件格式化react代码"></a>使用prettier插件格式化react代码</h2><ul>
+<li>安装插件</li>
+</ul>
+<p><img src="images/image-20200907165515629-1629115818044.png" alt="image-20200907165515629" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="images/image-20200907165515629-1629115818044.png" class="lozad post-image"></p>
+<ul>
+<li>添加prettier的配置</li>
+</ul>
+<pre class="highlight"><span class="line"><span class="comment">// 保存到额时候用使用prettier进行格式化</span></span><br><span class="line"><span class="string">&quot;editor.formatOnSave&quot;</span>: <span class="literal">true</span>,</span><br><span class="line"><span class="comment">// 不要有分号</span></span><br><span class="line"><span class="string">&quot;prettier.semi&quot;</span>: <span class="literal">false</span>,</span><br><span class="line"><span class="comment">// 使用单引号</span></span><br><span class="line"><span class="string">&quot;prettier.singleQuote&quot;</span>: <span class="literal">true</span>,</span><br><span class="line"><span class="comment">// 默认使用prittier作为格式化工具</span></span><br><span class="line"><span class="string">&quot;editor.defaultFormatter&quot;</span>: <span class="string">&quot;esbenp.prettier-vscode&quot;</span>,</span><br></pre>
+
+<h2 id="JSX中嵌入JavaScript表达式"><a href="#JSX中嵌入JavaScript表达式" class="headerlink" title="JSX中嵌入JavaScript表达式"></a>JSX中嵌入JavaScript表达式</h2><blockquote>
+<p>在jsx中可以在 <code>&#123;&#125;</code>来使用js表达式</p>
+</blockquote>
+<ul>
+<li>基本使用</li>
+</ul>
+<pre class="highlight"><span class="line"><span class="keyword">const</span> name = <span class="string">&#x27;zs&#x27;</span></span><br><span class="line"><span class="keyword">const</span> age = <span class="number">18</span></span><br><span class="line"><span class="keyword">const</span> title = (</span><br><span class="line">  <span class="language-xml"><span class="tag">&lt;<span class="name">h1</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">    姓名：&#123;name&#125;, 年龄：&#123;age&#125;</span></span><br><span class="line"><span class="language-xml">  <span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span></span><br><span class="line">)</span><br></pre>
+
+<ul>
+<li>可以访问对象的属性</li>
+</ul>
+<pre class="highlight"><span class="line"><span class="keyword">const</span> car = &#123;</span><br><span class="line">    <span class="attr">brand</span>: <span class="string">&#x27;玛莎拉蒂&#x27;</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">const</span> title = (</span><br><span class="line">  <span class="language-xml"><span class="tag">&lt;<span class="name">h1</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">    汽车：&#123;car.brand&#125;</span></span><br><span class="line"><span class="language-xml">  <span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span></span><br><span class="line">)</span><br></pre>
+
+<ul>
+<li>可以访问数组的下标</li>
+</ul>
+<pre class="highlight"><span class="line"><span class="keyword">const</span> friends = [<span class="string">&#x27;张三&#x27;</span>, <span class="string">&#x27;李四&#x27;</span>]</span><br><span class="line"><span class="keyword">const</span> title = (</span><br><span class="line">  <span class="language-xml"><span class="tag">&lt;<span class="name">h1</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">    汽车：&#123;friends[1]&#125;</span></span><br><span class="line"><span class="language-xml">  <span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span></span><br><span class="line">)</span><br></pre>
+
+<ul>
+<li>可以使用三元运算符</li>
+</ul>
+<pre class="highlight"><span class="line"><span class="keyword">const</span> gender = <span class="number">18</span></span><br><span class="line"><span class="keyword">const</span> title = (</span><br><span class="line">  <span class="language-xml"><span class="tag">&lt;<span class="name">h1</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">    性别：&#123;age &gt;= 18? &#x27;是&#x27;:&#x27;否&#x27;&#125;</span></span><br><span class="line"><span class="language-xml">  <span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span></span><br><span class="line">)</span><br></pre>
+
+<ul>
+<li>可以调用方法</li>
+</ul>
+<pre class="highlight"><span class="line"><span class="keyword">function</span> <span class="title function_">sayHi</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="string">&#x27;你好&#x27;</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">const</span> title = <span class="language-xml"><span class="tag">&lt;<span class="name">h1</span>&gt;</span>姓名：&#123;sayHi()&#125;<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span></span><br></pre>
+
+<ul>
+<li>JSX本身</li>
+</ul>
+<pre class="highlight"><span class="line"><span class="keyword">const</span> span = <span class="language-xml"><span class="tag">&lt;<span class="name">span</span>&gt;</span>我是一个span<span class="tag">&lt;/<span class="name">span</span>&gt;</span></span></span><br><span class="line"><span class="keyword">const</span> title = <span class="language-xml"><span class="tag">&lt;<span class="name">h1</span>&gt;</span>盒子&#123;span&#125;<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span></span><br></pre>
+
+<ul>
+<li>JSX中的注释</li>
+</ul>
+<pre class="highlight"><span class="line">&#123;<span class="comment">/* 这是jsx中的注释 */</span>&#125;   推荐快键键 ctrl + /</span><br></pre>
+
+<ul>
+<li>不要出现语句，比如 <code>if</code> <code>for</code></li>
+</ul>
+<h2 id="条件渲染"><a href="#条件渲染" class="headerlink" title="条件渲染"></a>条件渲染</h2><blockquote>
+<p>在react中，一切都是javascript，所以条件渲染完全是通过js来控制的</p>
+</blockquote>
+<ul>
+<li>通过判断 <code>if/else</code>控制</li>
+</ul>
+<pre class="highlight"><span class="line"><span class="keyword">const</span> isLoding = <span class="literal">false</span></span><br><span class="line"><span class="keyword">const</span> <span class="title function_">loadData</span> = (<span class="params"></span>) =&gt; &#123;</span><br><span class="line">  <span class="keyword">if</span> (isLoding) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="language-xml"><span class="tag">&lt;<span class="name">div</span>&gt;</span>数据加载中.....<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="language-xml"><span class="tag">&lt;<span class="name">div</span>&gt;</span>数据加载完成，此处显示加载后的数据<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> title = <span class="language-xml"><span class="tag">&lt;<span class="name">div</span>&gt;</span>条件渲染：&#123;loadData()&#125;<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br></pre>
+
+<ul>
+<li>通过三元运算符控制</li>
+</ul>
+<pre class="highlight"><span class="line"><span class="keyword">const</span> isLoding = <span class="literal">false</span></span><br><span class="line"><span class="keyword">const</span> <span class="title function_">loadData</span> = (<span class="params"></span>) =&gt; &#123;</span><br><span class="line">  <span class="keyword">return</span> isLoding ? (</span><br><span class="line">    <span class="language-xml"><span class="tag">&lt;<span class="name">div</span>&gt;</span>数据加载中.....<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br><span class="line">  ) : (</span><br><span class="line">    <span class="language-xml"><span class="tag">&lt;<span class="name">div</span>&gt;</span>数据加载完成，此处显示加载后的数据<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br><span class="line">  )</span><br><span class="line">&#125;</span><br></pre>
+
+<ul>
+<li>逻辑运算符</li>
+</ul>
+<pre class="highlight"><span class="line"><span class="keyword">const</span> isLoding = <span class="literal">false</span></span><br><span class="line"><span class="keyword">const</span> <span class="title function_">loadData</span> = (<span class="params"></span>) =&gt; &#123;</span><br><span class="line">  <span class="keyword">return</span> isLoding &amp;&amp; <span class="language-xml"><span class="tag">&lt;<span class="name">div</span>&gt;</span>加载中...<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> title = <span class="language-xml"><span class="tag">&lt;<span class="name">div</span>&gt;</span>条件渲染：&#123;loadData()&#125;<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br></pre>
+
+<h2 id="vscode配置自动补全"><a href="#vscode配置自动补全" class="headerlink" title="vscode配置自动补全"></a>vscode配置自动补全</h2><pre class="highlight"><span class="line"><span class="comment">// 当按tab键的时候，会自动提示</span></span><br><span class="line"><span class="string">&quot;emmet.triggerExpansionOnTab&quot;</span>: <span class="literal">true</span>,</span><br><span class="line"><span class="string">&quot;emmet.showAbbreviationSuggestions&quot;</span>: <span class="literal">true</span>,</span><br><span class="line"><span class="comment">// jsx的提示</span></span><br><span class="line"><span class="string">&quot;emmet.includeLanguages&quot;</span>: &#123;</span><br><span class="line">  <span class="string">&quot;javascript&quot;</span>: <span class="string">&quot;javascriptreact&quot;</span></span><br><span class="line">&#125;</span><br></pre>
+
+<h2 id="列表渲染"><a href="#列表渲染" class="headerlink" title="列表渲染"></a>列表渲染</h2><blockquote>
+<p>我们经常需要遍历一个数组来重复渲染一段结构</p>
+<p>在react中，通过map方法进行列表的渲染</p>
+</blockquote>
+<ul>
+<li>列表的渲染</li>
+</ul>
+<pre class="highlight"><span class="line"><span class="keyword">const</span> songs = [<span class="string">&#x27;温柔&#x27;</span>, <span class="string">&#x27;倔强&#x27;</span>, <span class="string">&#x27;私奔到月球&#x27;</span>]</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> list = songs.<span class="title function_">map</span>(<span class="function"><span class="params">song</span> =&gt;</span> <span class="language-xml"><span class="tag">&lt;<span class="name">li</span>&gt;</span>&#123;song&#125;<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> dv = (</span><br><span class="line">  <span class="language-xml"><span class="tag">&lt;<span class="name">div</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">    <span class="tag">&lt;<span class="name">ul</span>&gt;</span>&#123;list&#125;<span class="tag">&lt;/<span class="name">ul</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">  <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br><span class="line">)</span><br></pre>
+
+<ul>
+<li>直接在JSX中渲染</li>
+</ul>
+<pre class="highlight"><span class="line"><span class="keyword">const</span> songs = [<span class="string">&#x27;温柔&#x27;</span>, <span class="string">&#x27;倔强&#x27;</span>, <span class="string">&#x27;私奔到月球&#x27;</span>]</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> dv = (</span><br><span class="line">  <span class="language-xml"><span class="tag">&lt;<span class="name">div</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">    <span class="tag">&lt;<span class="name">ul</span>&gt;</span>&#123;songs.map(song =&gt; <span class="tag">&lt;<span class="name">li</span>&gt;</span>&#123;song&#125;<span class="tag">&lt;/<span class="name">li</span>&gt;</span>)&#125;<span class="tag">&lt;/<span class="name">ul</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">  <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br><span class="line">)</span><br></pre>
+
+<ul>
+<li>key属性的使用</li>
+</ul>
+<pre class="highlight"><span class="line"><span class="keyword">const</span> dv = (</span><br><span class="line">  <span class="language-xml"><span class="tag">&lt;<span class="name">div</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">    <span class="tag">&lt;<span class="name">ul</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">      &#123;songs.map(song =&gt; (</span></span><br><span class="line"><span class="language-xml">        <span class="tag">&lt;<span class="name">li</span> <span class="attr">key</span>=<span class="string">&#123;song&#125;</span>&gt;</span>&#123;song&#125;<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">      ))&#125;</span></span><br><span class="line"><span class="language-xml">    <span class="tag">&lt;/<span class="name">ul</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">  <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br><span class="line">)</span><br></pre>
+
+<p><strong>注意：列表渲染时应该给重复渲染的元素添加key属性，key属性的值要保证唯一</strong></p>
+<p><strong>注意：key值避免使用index下标，因为下标会发生改变</strong></p>
+<h2 id="样式处理"><a href="#样式处理" class="headerlink" title="样式处理"></a>样式处理</h2><h3 id="行内样式-style"><a href="#行内样式-style" class="headerlink" title="行内样式-style"></a>行内样式-style</h3><pre class="highlight"><span class="line"><span class="keyword">const</span> dv = (</span><br><span class="line">  <span class="language-xml"><span class="tag">&lt;<span class="name">div</span> <span class="attr">style</span>=<span class="string">&#123;&#123;</span> <span class="attr">color:</span> &#x27;<span class="attr">red</span>&#x27;, <span class="attr">backgroundColor:</span> &#x27;<span class="attr">pink</span>&#x27; &#125;&#125;&gt;</span>style样式<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br><span class="line">)</span><br></pre>
+
+<h3 id="类名-className"><a href="#类名-className" class="headerlink" title="类名-className"></a>类名-className</h3><pre class="highlight"><span class="line"><span class="comment">// 导入样式</span></span><br><span class="line"><span class="keyword">import</span> <span class="string">&#x27;./base.css&#x27;</span></span><br><span class="line"><span class="keyword">const</span> dv = <span class="language-xml"><span class="tag">&lt;<span class="name">div</span> <span class="attr">className</span>=<span class="string">&quot;title&quot;</span>&gt;</span>style样式<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br></pre>
+
+<p>base.css样式文件</p>
+<pre class="highlight"><span class="line"><span class="selector-class">.title</span> &#123;</span><br><span class="line">  <span class="attribute">text-align</span>: center;</span><br><span class="line">  <span class="attribute">color</span>: red;</span><br><span class="line">  <span class="attribute">background-color</span>: pink;</span><br><span class="line">&#125;</span><br></pre>
+
+<h2 id="练习-1"><a href="#练习-1" class="headerlink" title="练习"></a>练习</h2><pre class="highlight"><span class="line"><span class="keyword">const</span> list = [</span><br><span class="line">  &#123; <span class="attr">id</span>: <span class="number">1</span>, <span class="attr">name</span>: <span class="string">&quot;刘德华&quot;</span>, <span class="attr">content</span>: <span class="string">&quot;给我一杯忘情水&quot;</span> &#125;,</span><br><span class="line">  &#123; <span class="attr">id</span>: <span class="number">2</span>, <span class="attr">name</span>: <span class="string">&quot;五月天&quot;</span>, <span class="attr">content</span>: <span class="string">&quot;不打扰，是我的温柔&quot;</span> &#125;,</span><br><span class="line">  &#123; <span class="attr">id</span>: <span class="number">3</span>, <span class="attr">name</span>: <span class="string">&quot;毛不易&quot;</span>, <span class="attr">content</span>: <span class="string">&quot;像我这样优秀的人&quot;</span> &#125;</span><br><span class="line">];</span><br></pre>
+
+<p><img src="images/image-20210816202854520.png" alt="image-20210816202854520" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="images/image-20210816202854520.png" class="lozad post-image"></p>
+<p><img src="images/image-20210816203947396.png" alt="image-20210816203947396" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="images/image-20210816203947396.png" class="lozad post-image"></p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><ul>
+<li>JSX是React的核心内容</li>
+<li>JSX表示在JS代码中书写HTML结构，是React声明式的体现</li>
+<li>使用JSX配合嵌入的JS表达式，条件渲染，列表渲染，可以渲染任意的UI结构</li>
+<li>结果使用className和style的方式给JSX添加样式</li>
+<li>React完全利用JS的语言自身的能力来编写UI，而不是造轮子增强HTML的功能。（对比VUE）<br>tags:</li>
+</ul>
+
+  </div>
+  <div>
+    
+      <div 
+        class="post-note note-warning copyright" 
+        style="margin-top: 42px">
+        <p>
+          <span style="font-weight: bold;">作者：</span><a 
+            target="_blank" 
+            rel="nofollow noopener noreferrer" 
+            href="/about">
+            theme-kaze
+          </a>
+        </p>
+        <p>
+          <span style="font-weight: bold;">文章链接：</span><a 
+            target="_blank" 
+            rel="nofollow noopener noreferrer" 
+            href="http://example.com/2023/04/24/01-React%20%E5%9F%BA%E7%A1%80/">
+            http://example.com/2023/04/24/01-React%20%E5%9F%BA%E7%A1%80/
+          </a>
+        </p>
+        <p><span style="font-weight: bold;">版权声明：</span>本博客所有文章除特别声明外，均采用<a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">CC BY-NC-SA 4.0 协议</a>。转载请注明出处！</p>
+      </div>
+    
+  </div>
+</article>
+<div class="nav">
+  
+    <div class="nav-item-prev">
+      <a 
+        href="/2023/04/24/02-%E7%BB%84%E4%BB%B6%E5%9F%BA%E7%A1%80/" 
+        class="nav-link">
+        <i class="iconfont icon-left nav-prev-icon"></i>
+        <div>
+          <div class="nav-label">上一篇</div>
+          
+            <div class="nav-title">组件基本介绍 </div>
+          
+        </div>
+      </a>
+    </div>
+  
+  
+    <div class="nav-item-next">
+      <a 
+        href="/2023/04/24/react%E5%9F%BA%E7%A1%80Day04-React%E5%8E%9F%E7%90%86%E6%8F%AD%E7%A7%98&amp;React%E8%B7%AF%E7%94%B1%E5%9F%BA%E7%A1%80/" 
+        class="nav-link">
+        <div>
+          <div class="nav-label">下一篇</div>
+          
+            <div class="nav-title">React原理揭秘 </div>
+          
+        </div>
+        <i class="iconfont icon-right nav-next-icon"></i>
+      </a>
+    </div>
+  
+</div>
+
+<div 
+  class="card card-content toc-card" 
+  id="mobiletoc">
+  <div class="toc-header">
+  <i 
+    class="iconfont icon-menu" 
+    style="padding-right: 2px;">
+  </i>目录
+</div>
+<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%AF%BE%E7%A8%8B%E5%AE%89%E6%8E%92"><span class="toc-text">课程安排</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#React-%E6%A6%82%E8%BF%B0"><span class="toc-text">React 概述</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AD%A6%E4%B9%A0%E7%9B%AE%E6%A0%87"><span class="toc-text">学习目标</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#React-%E4%BB%8B%E7%BB%8D"><span class="toc-text">React 介绍</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#react%E7%89%B9%E7%82%B9"><span class="toc-text">react特点</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A3%B0%E6%98%8E%E5%BC%8FUI"><span class="toc-text">声明式UI</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BB%84%E4%BB%B6%E5%8C%96"><span class="toc-text">组件化</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AD%A6%E4%B9%A0%E4%B8%80%E6%AC%A1%EF%BC%8C%E9%9A%8F%E5%A4%84%E4%BD%BF%E7%94%A8"><span class="toc-text">学习一次，随处使用</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#React-%E8%84%9A%E6%89%8B%E6%9E%B6%EF%BC%88CLI%EF%BC%89"><span class="toc-text">React 脚手架（CLI）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#React-%E8%84%9A%E6%89%8B%E6%9E%B6%E7%9A%84%E4%BB%8B%E7%BB%8D"><span class="toc-text">React 脚手架的介绍</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8-React-%E8%84%9A%E6%89%8B%E6%9E%B6%E5%88%9B%E5%BB%BA%E9%A1%B9%E7%9B%AE"><span class="toc-text">使用 React 脚手架创建项目</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%A1%B9%E7%9B%AE%E7%9B%AE%E5%BD%95%E7%BB%93%E6%9E%84%E8%AF%B4%E6%98%8E%E5%92%8C%E8%B0%83%E6%95%B4"><span class="toc-text">项目目录结构说明和调整</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#React-%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8"><span class="toc-text">React 的基本使用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9F%BA%E6%9C%AC%E6%AD%A5%E9%AA%A4"><span class="toc-text">基本步骤</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BB%83%E4%B9%A0"><span class="toc-text">练习</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B0%8F%E7%BB%93"><span class="toc-text">小结</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#JSX"><span class="toc-text">JSX</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AD%A6%E4%B9%A0%E7%9B%AE%E6%A0%87-1"><span class="toc-text">学习目标</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#JSX%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8"><span class="toc-text">JSX的基本使用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#createElement%E7%9A%84%E9%97%AE%E9%A2%98"><span class="toc-text">createElement的问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#JSX%E7%AE%80%E4%BB%8B"><span class="toc-text">JSX简介</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E6%AD%A5%E9%AA%A4"><span class="toc-text">使用步骤</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#JSX%E6%B3%A8%E6%84%8F%E7%82%B9"><span class="toc-text">JSX注意点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8prettier%E6%8F%92%E4%BB%B6%E6%A0%BC%E5%BC%8F%E5%8C%96react%E4%BB%A3%E7%A0%81"><span class="toc-text">使用prettier插件格式化react代码</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#JSX%E4%B8%AD%E5%B5%8C%E5%85%A5JavaScript%E8%A1%A8%E8%BE%BE%E5%BC%8F"><span class="toc-text">JSX中嵌入JavaScript表达式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9D%A1%E4%BB%B6%E6%B8%B2%E6%9F%93"><span class="toc-text">条件渲染</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#vscode%E9%85%8D%E7%BD%AE%E8%87%AA%E5%8A%A8%E8%A1%A5%E5%85%A8"><span class="toc-text">vscode配置自动补全</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%97%E8%A1%A8%E6%B8%B2%E6%9F%93"><span class="toc-text">列表渲染</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A0%B7%E5%BC%8F%E5%A4%84%E7%90%86"><span class="toc-text">样式处理</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%A1%8C%E5%86%85%E6%A0%B7%E5%BC%8F-style"><span class="toc-text">行内样式-style</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%B1%BB%E5%90%8D-className"><span class="toc-text">类名-className</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BB%83%E4%B9%A0-1"><span class="toc-text">练习</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-text">总结</span></a></li></ol></li></ol>
+</div>
+            </main>
+            <aside class="right-column">
+              <div class="sticky-widescreen">
+  
+  
+    <article class="card card-content toc-card">
+      <div class="toc-header">
+  <i 
+    class="iconfont icon-menu" 
+    style="padding-right: 2px;">
+  </i>目录
+</div>
+<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%AF%BE%E7%A8%8B%E5%AE%89%E6%8E%92"><span class="toc-text">课程安排</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#React-%E6%A6%82%E8%BF%B0"><span class="toc-text">React 概述</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AD%A6%E4%B9%A0%E7%9B%AE%E6%A0%87"><span class="toc-text">学习目标</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#React-%E4%BB%8B%E7%BB%8D"><span class="toc-text">React 介绍</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#react%E7%89%B9%E7%82%B9"><span class="toc-text">react特点</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A3%B0%E6%98%8E%E5%BC%8FUI"><span class="toc-text">声明式UI</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BB%84%E4%BB%B6%E5%8C%96"><span class="toc-text">组件化</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AD%A6%E4%B9%A0%E4%B8%80%E6%AC%A1%EF%BC%8C%E9%9A%8F%E5%A4%84%E4%BD%BF%E7%94%A8"><span class="toc-text">学习一次，随处使用</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#React-%E8%84%9A%E6%89%8B%E6%9E%B6%EF%BC%88CLI%EF%BC%89"><span class="toc-text">React 脚手架（CLI）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#React-%E8%84%9A%E6%89%8B%E6%9E%B6%E7%9A%84%E4%BB%8B%E7%BB%8D"><span class="toc-text">React 脚手架的介绍</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8-React-%E8%84%9A%E6%89%8B%E6%9E%B6%E5%88%9B%E5%BB%BA%E9%A1%B9%E7%9B%AE"><span class="toc-text">使用 React 脚手架创建项目</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%A1%B9%E7%9B%AE%E7%9B%AE%E5%BD%95%E7%BB%93%E6%9E%84%E8%AF%B4%E6%98%8E%E5%92%8C%E8%B0%83%E6%95%B4"><span class="toc-text">项目目录结构说明和调整</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#React-%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8"><span class="toc-text">React 的基本使用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9F%BA%E6%9C%AC%E6%AD%A5%E9%AA%A4"><span class="toc-text">基本步骤</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BB%83%E4%B9%A0"><span class="toc-text">练习</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B0%8F%E7%BB%93"><span class="toc-text">小结</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#JSX"><span class="toc-text">JSX</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AD%A6%E4%B9%A0%E7%9B%AE%E6%A0%87-1"><span class="toc-text">学习目标</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#JSX%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8"><span class="toc-text">JSX的基本使用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#createElement%E7%9A%84%E9%97%AE%E9%A2%98"><span class="toc-text">createElement的问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#JSX%E7%AE%80%E4%BB%8B"><span class="toc-text">JSX简介</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E6%AD%A5%E9%AA%A4"><span class="toc-text">使用步骤</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#JSX%E6%B3%A8%E6%84%8F%E7%82%B9"><span class="toc-text">JSX注意点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8prettier%E6%8F%92%E4%BB%B6%E6%A0%BC%E5%BC%8F%E5%8C%96react%E4%BB%A3%E7%A0%81"><span class="toc-text">使用prettier插件格式化react代码</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#JSX%E4%B8%AD%E5%B5%8C%E5%85%A5JavaScript%E8%A1%A8%E8%BE%BE%E5%BC%8F"><span class="toc-text">JSX中嵌入JavaScript表达式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9D%A1%E4%BB%B6%E6%B8%B2%E6%9F%93"><span class="toc-text">条件渲染</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#vscode%E9%85%8D%E7%BD%AE%E8%87%AA%E5%8A%A8%E8%A1%A5%E5%85%A8"><span class="toc-text">vscode配置自动补全</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%97%E8%A1%A8%E6%B8%B2%E6%9F%93"><span class="toc-text">列表渲染</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A0%B7%E5%BC%8F%E5%A4%84%E7%90%86"><span class="toc-text">样式处理</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%A1%8C%E5%86%85%E6%A0%B7%E5%BC%8F-style"><span class="toc-text">行内样式-style</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%B1%BB%E5%90%8D-className"><span class="toc-text">类名-className</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BB%83%E4%B9%A0-1"><span class="toc-text">练习</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-text">总结</span></a></li></ol></li></ol>
+    </article>
+  
+  
+  <article class="card card-content">
+    <div class="recent-posts-card">
+  <div class="recent-posts-header">
+    <i 
+      class="iconfont icon-wenzhang_huaban" 
+      style="padding-right: 2px;">
+    </i>最近文章
+  </div>
+  <div class="recent-posts-list">
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2023-04-24</div>
+        <a href="/2023/04/24/js%E5%BC%82%E6%AD%A5%E5%A4%84%E7%90%86%E6%96%B9%E6%A1%88%EF%BC%8Cjs%E7%9A%84%E5%BC%82%E6%AD%A5%E4%B8%B2%E8%A1%8C%E4%B8%8E%E5%BC%82%E6%AD%A5%E5%B9%B6%E8%A1%8C/"><div class="recent-posts-item-content">js的异步串行与异步并行</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2023-04-24</div>
+        <a href="/2023/04/24/03-hooks%E8%BF%9B%E9%98%B6/"><div class="recent-posts-item-content">hooks进阶</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2023-04-24</div>
+        <a href="/2023/04/24/02-hooks%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/"><div class="recent-posts-item-content">hooks基本使用</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2023-04-24</div>
+        <a href="/2023/04/24/01-react-%E7%BB%84%E4%BB%B6%E5%A4%8D%E7%94%A8/"><div class="recent-posts-item-content">组件复用的说明</div></a>
+      </div>
+    
+  </div>
+</div>
+  </article>
+  
+  
+</div>
+            </aside>
+          </div>
+        </div>
+      </div>
+    </div>
+     
+    <footer class="footer">
+  <div class="footer-container">
+    <div>
+      <div class="footer-dsc">
+        <span>
+          Copyright ©
+          
+            2020
+          
+          
+                - 
+                2023
+          
+        </span>
+        &nbsp;
+        <a 
+          href="/" 
+          class="footer-link">
+          Theme Kaze
+        </a>
+      </div>
+    </div>
+
+    
+      <div class="footer-dsc">
+        
+          Powered by
+          <a 
+            href="https://hexo.io/" 
+            class="footer-link" 
+            target="_blank" 
+            rel="nofollow noopener noreferrer">
+            &nbsp;Hexo
+          </a>
+        
+        
+          <span>&nbsp;|&nbsp;</span>
+        
+        
+          Theme -
+          <a 
+            href="https://github.com/theme-kaze" 
+            class="footer-link" 
+            target="_blank"
+            rel="nofollow noopener noreferrer">
+            &nbsp;Kaze
+          </a>
+        
+      </div>
+    
+    
+    
+    
+</footer>
+ 
+    
+  <a 
+    role="button" 
+    id="scrollbutton" 
+    class="basebutton" 
+    aria-label="回到顶部">
+    <i class="iconfont icon-arrowleft button-icon"></i>
+  </a>
+
+<a 
+  role="button" 
+  id="menubutton"
+  aria-label="menu button"
+  class="basebutton">
+  <i class="iconfont icon-menu button-icon"></i>
+</a>
+<a 
+  role="button" 
+  id="popbutton" 
+  class="basebutton" 
+  aria-label="控制中心">
+  <i class="iconfont icon-expand button-icon"></i>
+</a>
+<a 
+  role="button" 
+  id="darkbutton" 
+  class="basebutton darkwidget" 
+  aria-label="夜色模式">
+  <i class="iconfont icon-weather button-icon"></i>
+</a>
+<a 
+  role="button" 
+  id="searchbutton" 
+  class="basebutton searchwidget" 
+  aria-label="搜索">
+  <i class="iconfont icon-search button-icon"></i>
+</a> 
+     
+     
+     
+      <script>
+  var addImgLayout = function () {
+    var img = document.querySelectorAll('.post-content img')
+    var i
+    for (i = 0; i < img.length; i++) {
+      var wrapper = document.createElement('a')
+      wrapper.setAttribute('href', img[i].getAttribute('data-src'))
+      wrapper.setAttribute('aria-label', 'illustration')
+      wrapper.style.cssText =
+        'width: 100%; display: flex; justify-content: center;'
+      if (img[i].alt) wrapper.dataset.caption = img[i].alt
+      wrapper.dataset.nolink = true
+      img[i].before(wrapper)
+      wrapper.append(img[i])
+      var divWrap = document.createElement('div')
+      divWrap.classList.add('gallery')
+      wrapper.before(divWrap)
+      divWrap.append(wrapper)
+    }
+    baguetteBox.run('.gallery')
+  }
+</script>
+<script>
+  loadScript(
+    "/js/lib/lightbox/baguetteBox.min.js",
+    addImgLayout
+  )
+</script>
+ 
+     
+     
+    <script src="/js/main.js"></script> 
+     
+    
+      <script>
+        var addLazyload = function () {
+          var observer = lozad('.lozad', {
+            load: function (el) {
+              el.srcset = el.getAttribute('data-src')
+            },
+            loaded: function (el) {
+              el.classList.add('loaded')
+            },
+          })
+          observer.observe()
+        }
+      </script>
+      <script>
+        loadScript('/js/lib/lozad.min.js', addLazyload)
+      </script>
+    
+    <script src="//instant.page/5.1.0" type="module"
+      integrity="sha384-by67kQnR+pyfy8yWP4kPO12fHKRLHZPfEsiSXR8u2IKcTdxD805MGUXBzVPnkLHw"></script>
+    
+    
+  </body>
+</html>

@@ -1,0 +1,854 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+  <meta charset="UTF-8">
+  <meta 
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+  <meta 
+    http-equiv="X-UA-Compatible" 
+    content="ie=edge">
+  <meta 
+    name="theme-color" 
+    content="#fff" 
+    id="theme-color">
+  <meta 
+    name="description" 
+    content="Hexo">
+  <link 
+    rel="icon" 
+    href="/">
+  <title>Hello World</title>
+  
+    
+      <meta 
+        property="og:title" 
+        content="Hello World">
+    
+    
+      <meta 
+        property="og:url" 
+        content="http://example.com/2023/04/24/react%E5%9F%BA%E7%A1%80Day03-%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F&amp;render%20props%E6%A8%A1%E5%BC%8F&amp;%E9%AB%98%E9%98%B6%E7%BB%84%E4%BB%B6&amp;%E5%8E%9F%E7%90%86%E6%8F%AD%E7%A7%98/index.html">
+    
+    
+      <meta 
+        property="og:img" 
+        content="https://img.songhn.com/img/Y67gdd.png">
+    
+    
+    
+      <meta 
+        property="og:type" 
+        content="article">
+      <meta 
+        property="og:article:published_time" 
+        content="2023-04-24">
+      <meta 
+        property="og:article:modified_time" 
+        content="2023-04-24">
+      <meta 
+        property="og:article:author" 
+        content="theme-kaze">
+      
+        
+      
+    
+  
+  
+  <link rel="preload" href="//at.alicdn.com/t/font_1946621_i1kgafibvw.css" as="style" >
+  <link rel="preload" href="//at.alicdn.com/t/font_1952792_89b4ac4k4up.css" as="style" >
+  <link rel="preload" href="/css/main.css" as="style" >
+  
+  <link rel="modulepreload" href="//instant.page/5.1.0">
+  
+  <link rel="stylesheet" href="/css/main.css">
+  
+  <link rel="stylesheet" href="//at.alicdn.com/t/font_1946621_i1kgafibvw.css">
+  
+  <link rel="stylesheet" href="//at.alicdn.com/t/font_1952792_89b4ac4k4up.css">
+  
+  
+  
+    <link rel="stylesheet" href="/js/lib/lightbox/baguetteBox.min.css">
+  
+  <script>
+    function loadScript(url, cb) {
+      var script = document.createElement('script');
+      script.src = url;
+      if (cb) script.onload = cb;
+      script.async = true;
+      document.body.appendChild(script);
+    }
+    function loadCSS(href, data, attr) {
+      var sheet = document.createElement('link');
+      sheet.ref = 'stylesheet';
+      sheet.href = href;
+      sheet.dataset[data] = attr;
+      document.head.appendChild(sheet);
+    }
+    function changeCSS(cssFile, data, attr) {
+      var oldlink = document.querySelector(data);
+      var newlink = document.createElement("link");
+      newlink.setAttribute("rel", "stylesheet");
+      newlink.setAttribute("href", cssFile);
+      newlink.dataset.prism = attr;
+      document.head.replaceChild(newlink, oldlink);
+    }
+  </script>
+  
+    
+  
+  <script>
+    // control reverse button
+    var reverseDarkList = {
+      dark: 'light',
+      light: 'dark'
+    };
+    var themeColor = {
+      dark: '#1c1c1e',
+      light: '#fff'
+    }
+    // get the data of css prefers-color-scheme
+    var getCssMediaQuery = function() {
+      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    };
+    // reverse current darkmode setting function
+    var reverseDarkModeSetting = function() {
+      var setting = localStorage.getItem('user-color-scheme');
+      if(reverseDarkList[setting]) {
+        setting = reverseDarkList[setting];
+      } else if(setting === null) {
+        setting = reverseDarkList[getCssMediaQuery()];
+      } else {
+        return;
+      }
+      localStorage.setItem('user-color-scheme', setting);
+      return setting;
+    };
+    // apply current darkmode setting
+  </script>
+  
+    <script>
+      var setDarkmode = function(mode) {
+      var setting = mode || localStorage.getItem('user-color-scheme');
+      if(setting === getCssMediaQuery()) {
+        document.documentElement.removeAttribute('data-user-color-scheme');
+        localStorage.removeItem('user-color-scheme');
+        document.getElementById('theme-color').content = themeColor[setting];
+        document.getElementById('theme-color').dataset.mode = setting;
+      } else if(reverseDarkList[setting]) {
+        document.documentElement.setAttribute('data-user-color-scheme', setting);
+        document.getElementById('theme-color').content = themeColor[setting];
+        document.getElementById('theme-color').dataset.mode = setting;
+      } else {
+        document.documentElement.removeAttribute('data-user-color-scheme');
+        localStorage.removeItem('user-color-scheme');
+        document.getElementById('theme-color').content = themeColor[getCssMediaQuery()];
+        document.getElementById('theme-color').dataset.mode = getCssMediaQuery();
+      }
+    };
+    setDarkmode();
+    </script>
+  
+  
+  
+    <link rel="preload" href="/js/lib/lightbox/baguetteBox.min.js" as="script">
+    <link rel="preload" href="/js/lib/lightbox/baguetteBox.min.css" as="style" >
+  
+  
+    <link rel="preload" href="/js/lib/lozad.min.js" as="script">
+  
+  
+  
+  
+  
+  
+<meta name="generator" content="Hexo 5.4.2"><link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+</head>
+
+  <body>
+    <div class="wrapper">
+       
+      <nav class="navbar">
+  <div class="navbar-logo">
+    <a class="navbar-logo-main" href="/">
+      
+      <span class="navbar-logo-dsc">Theme Kaze</span>
+      </a>
+  </div>
+  <div class="navbar-menu">
+    
+      <a 
+        href="/" 
+        class="navbar-menu-item">
+        
+          首页
+        
+      </a>
+    
+      <a 
+        href="/archives" 
+        class="navbar-menu-item">
+        
+          归档
+        
+      </a>
+    
+      <a 
+        href="/tags" 
+        class="navbar-menu-item">
+        
+          标签
+        
+      </a>
+    
+      <a 
+        href="/categories" 
+        class="navbar-menu-item">
+        
+          分类
+        
+      </a>
+    
+      <a 
+        href="/about" 
+        class="navbar-menu-item">
+        
+          关于
+        
+      </a>
+    
+      <a 
+        href="/links" 
+        class="navbar-menu-item">
+        
+          友链
+        
+      </a>
+    
+    <button 
+      class="navbar-menu-item darknavbar navbar-menu-btn" 
+      aria-label="Toggle dark mode"
+      id="dark">
+      <i class="iconfont icon-weather"></i>
+    </button>
+    <button 
+      class="navbar-menu-item searchnavbar navbar-menu-btn" 
+      aria-label="Toggle search"
+      id="search">
+      <!-- <i 
+        class="iconfont icon-search" 
+        style="font-size: 1.2rem; font-weight: 400;">
+      </i> -->
+      <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img"
+        class="iconify iconify--ion" width="28" height="28" preserveAspectRatio="xMidYMid meet" viewBox="0 0 512 512">
+        <path fill="none" stroke="currentColor" stroke-miterlimit="10" stroke-width="28"
+          d="M256 80a176 176 0 1 0 176 176A176 176 0 0 0 256 80Z"></path>
+        <path fill="none" stroke="currentColor" stroke-miterlimit="10" stroke-width="28"
+          d="M232 160a72 72 0 1 0 72 72a72 72 0 0 0-72-72Z"></path>
+        <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-miterlimit="10" stroke-width="28"
+          d="M283.64 283.64L336 336"></path>
+      </svg>
+    </button>
+  </div>
+</nav> 
+      
+      <div 
+        id="local-search" 
+        style="display: none">
+        <input
+          class="navbar-menu-item"
+          id="search-input"
+          placeholder="请输入搜索内容..." />
+        <div id="search-content"></div>
+      </div>
+      
+      <div class="section-wrap">
+        <div class="container">
+          <div class="columns">
+            <aside class="left-column">
+              
+              <div class="card card-author">
+                
+  <img 
+    src="https://img.songhn.com/img/Y67gdd.png" 
+    class="author-img"
+    width="88"
+    height="88"
+    alt="author avatar">
+
+<p class="author-name">theme-kaze</p>
+<p class="author-description">designed by theme-kaze</p>
+<div class="author-message">
+  <a 
+    class="author-posts-count" 
+    href="/archives">
+    <span>14</span>
+    <span>文章</span>
+  </a>
+  <a 
+    class="author-categories-count" 
+    href="/categories">
+    <span>3</span>
+    <span>分类</span>
+  </a>
+  <a 
+    class="author-tags-count" 
+    href="/tags">
+    <span>0</span>
+    <span>标签</span>
+  </a>
+</div>
+
+              </div>
+               <div class="sticky-tablet">
+  
+  
+    <article class="display-when-two-columns spacer">
+      <div class="card card-content toc-card">
+        <div class="toc-header">
+  <i 
+    class="iconfont icon-menu" 
+    style="padding-right: 2px;">
+  </i>目录
+</div>
+<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%BB%84%E4%BB%B6%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%EF%BC%88%E2%98%85%E2%98%85%E2%98%85%EF%BC%89"><span class="toc-text">组件生命周期（★★★）</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%9B%AE%E6%A0%87"><span class="toc-text">目标</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A6%82%E8%BF%B0"><span class="toc-text">概述</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E9%98%B6%E6%AE%B5"><span class="toc-text">生命周期阶段</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E6%97%B6%EF%BC%88%E6%8C%82%E8%BD%BD%E9%98%B6%E6%AE%B5%EF%BC%89"><span class="toc-text">创建时（挂载阶段）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9B%B4%E6%96%B0%E6%97%B6"><span class="toc-text">更新时</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8D%B8%E8%BD%BD%E6%97%B6"><span class="toc-text">卸载时</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%8D%E5%B8%B8%E7%94%A8%E7%9A%84%E9%92%A9%E5%AD%90%E5%87%BD%E6%95%B0"><span class="toc-text">不常用的钩子函数</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%97%A7%E7%89%88%E7%9A%84%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E9%92%A9%E5%AD%90%E5%87%BD%E6%95%B0"><span class="toc-text">旧版的生命周期钩子函数</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%96%B0%E7%89%88%E5%AE%8C%E6%95%B4%E7%94%9F%E5%91%BD%E4%BC%9A%E8%B5%B0%E6%A3%8B%E9%92%A9%E5%AD%90%E5%87%BD%E6%95%B0"><span class="toc-text">新版完整生命会走棋钩子函数</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#getDerivedStateFromProps"><span class="toc-text">getDerivedStateFromProps()</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#shouldComponentUpdate"><span class="toc-text">shouldComponentUpdate()</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#getSnapshotBeforeUpdate"><span class="toc-text">getSnapshotBeforeUpdate()</span></a></li></ol></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#render-props%E6%A8%A1%E5%BC%8F-%EF%BC%88%E2%98%85%E2%98%85%E2%98%85%EF%BC%89"><span class="toc-text">render-props模式 （★★★）</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%9B%AE%E6%A0%87-1"><span class="toc-text">目标</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#React%E7%BB%84%E4%BB%B6%E5%A4%8D%E7%94%A8%E6%A6%82%E8%BF%B0"><span class="toc-text">React组件复用概述</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%9D%E8%B7%AF%E5%88%86%E6%9E%90"><span class="toc-text">思路分析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E6%AD%A5%E9%AA%A4"><span class="toc-text">使用步骤</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%A4%BA%E4%BE%8Bdemo"><span class="toc-text">示例demo</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#children%E4%BB%A3%E6%9B%BFrender%E5%B1%9E%E6%80%A7"><span class="toc-text">children代替render属性</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BC%98%E5%8C%96%E4%BB%A3%E7%A0%81"><span class="toc-text">优化代码</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E9%AB%98%E9%98%B6%E7%BB%84%E4%BB%B6-%EF%BC%88%E2%98%85%E2%98%85%E2%98%85%EF%BC%89"><span class="toc-text">高阶组件 （★★★）</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%9B%AE%E6%A0%87-2"><span class="toc-text">目标</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A6%82%E8%BF%B0-1"><span class="toc-text">概述</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%9D%E8%B7%AF%E5%88%86%E6%9E%90-1"><span class="toc-text">思路分析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E6%AD%A5%E9%AA%A4-1"><span class="toc-text">使用步骤</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AE%BE%E7%BD%AE-displayName"><span class="toc-text">设置 displayName</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BC%A0%E9%80%92props"><span class="toc-text">传递props</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B0%8F%E7%BB%93"><span class="toc-text">小结</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#React%E5%8E%9F%E7%90%86"><span class="toc-text">React原理</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%9B%AE%E6%A0%87-3"><span class="toc-text">目标</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#setState-%E8%AF%B4%E6%98%8E-%EF%BC%88%E2%98%85%E2%98%85%E2%98%85%EF%BC%89"><span class="toc-text">setState()说明 （★★★）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9B%B4%E6%96%B0%E6%95%B0%E6%8D%AE"><span class="toc-text">更新数据</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8E%A8%E8%8D%90%E8%AF%AD%E6%B3%95"><span class="toc-text">推荐语法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AC%AC%E4%BA%8C%E4%B8%AA%E5%8F%82%E6%95%B0"><span class="toc-text">第二个参数</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#JSX%E8%AF%AD%E6%B3%95%E7%9A%84%E8%BD%AC%E5%8C%96%E8%BF%87%E7%A8%8B-%EF%BC%88%E2%98%85%E2%98%85%E2%98%85%EF%BC%89"><span class="toc-text">JSX语法的转化过程 （★★★）</span></a></li></ol></li></ol>
+      </div>
+    </article>
+  
+  
+  <article class="card card-content categories-widget">
+    <div class="categories-card">
+  <div class="categories-header">
+    <i 
+      class="iconfont icon-fenlei" 
+      style="padding-right: 2px;">
+    </i>分类
+  </div>
+  <div class="categories-list">
+    
+      <a href="/categories/hooks/">
+        <div class="categories-list-item">
+          hooks
+          <span class="categories-list-item-badge">2</span>
+        </div>
+      </a>
+    
+      <a href="/categories/React/">
+        <div class="categories-list-item">
+          React
+          <span class="categories-list-item-badge">6</span>
+        </div>
+      </a>
+    
+      <a href="/categories/js/">
+        <div class="categories-list-item">
+          js
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+  </div>
+</div>
+  </article>
+  
+  <article class="card card-content tags-widget">
+    <div class="tags-card">
+  <div class="tags-header">
+    <i 
+      class="iconfont icon-biaoqian" 
+      style="padding-right: 2px;">
+    </i>热门标签
+  </div>
+  <div class="tags-list">
+    
+  </div>
+</div>
+  </article>
+  
+  
+</div>
+            </aside>
+            <main class="main-column">
+              
+<article class="card card-content">
+  <header>
+    <h1 class="post-title">
+      Hello World
+    </h1>
+  </header>
+  <div class="post-meta post-show-meta">
+    <time datetime="2023-04-24T09:01:45.809Z">
+      <i 
+        class="iconfont icon-calendar" 
+        style="margin-right: 2px;">
+      </i>
+      <span>2023-04-24</span>
+    </time>
+    
+    
+      <span class="dot"></span>
+      <span>2.1k 字</span>
+    
+  </div>
+  
+  </header>
+  <div 
+    id="section" 
+    class="post-content">
+    <h1 id="组件生命周期（★★★）"><a href="#组件生命周期（★★★）" class="headerlink" title="组件生命周期（★★★）"></a>组件生命周期（★★★）</h1><h2 id="目标"><a href="#目标" class="headerlink" title="目标"></a>目标</h2><ul>
+<li>说出组件生命周期对应的钩子函数</li>
+<li>钩子函数调用的时机</li>
+</ul>
+<h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>意义：组件的生命周期有助于理解组件的运行方式，完成更复杂的组件功能、分析组件错误原因等</p>
+<p>组件的生命周期： 组件从被创建到挂载到页面中运行，再到组件不在时卸载的过程</p>
+<p>生命周期的每个阶段总是伴随着一些方法调用，这些方法就是生命周期的钩子函数</p>
+<p>构造函数的作用：为开发人员在不同阶段操作组件提供了实际</p>
+<h2 id="生命周期阶段"><a href="#生命周期阶段" class="headerlink" title="生命周期阶段"></a>生命周期阶段</h2><p><img  srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="images/%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F.png" class="lozad post-image"src="images/%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F.png"></p>
+<h3 id="创建时（挂载阶段）"><a href="#创建时（挂载阶段）" class="headerlink" title="创建时（挂载阶段）"></a>创建时（挂载阶段）</h3><ul>
+<li>执行时机：组件创建时（页面加载时）</li>
+<li>执行顺序</li>
+</ul>
+<p><img  srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="images/%E5%88%9B%E5%BB%BA%E6%97%B6-%E5%87%BD%E6%95%B0%E6%89%A7%E8%A1%8C%E9%A1%BA%E5%BA%8F.png" class="lozad post-image"src="images/%E5%88%9B%E5%BB%BA%E6%97%B6-%E5%87%BD%E6%95%B0%E6%89%A7%E8%A1%8C%E9%A1%BA%E5%BA%8F.png"></p>
+<p><img  srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="images/%E5%88%9B%E5%BB%BA%E6%97%B6-%E5%87%BD%E6%95%B0%E7%9A%84%E4%BD%9C%E7%94%A8.png" class="lozad post-image"src="images/%E5%88%9B%E5%BB%BA%E6%97%B6-%E5%87%BD%E6%95%B0%E7%9A%84%E4%BD%9C%E7%94%A8.png"></p>
+<h3 id="更新时"><a href="#更新时" class="headerlink" title="更新时"></a>更新时</h3><p>执行时机：<code>setState()、 forceUpdate()、 组件接收到新的props</code></p>
+<p>说明：以上三者任意一种变化，组件就会重新渲染</p>
+<p>执行顺序：</p>
+<p><img  srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="images/%E6%9B%B4%E6%96%B0%E6%97%B6.png" class="lozad post-image"src="images/%E6%9B%B4%E6%96%B0%E6%97%B6.png"></p>
+<p><img  srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="images/%E6%9B%B4%E6%96%B0%E6%97%B6-%E5%87%BD%E6%95%B0%E4%BD%9C%E7%94%A8.png" class="lozad post-image"src="images/%E6%9B%B4%E6%96%B0%E6%97%B6-%E5%87%BD%E6%95%B0%E4%BD%9C%E7%94%A8.png"></p>
+<h3 id="卸载时"><a href="#卸载时" class="headerlink" title="卸载时"></a>卸载时</h3><p>执行时机：组件从页面中消失</p>
+<p>作用：用来做清理操作</p>
+<p><img  srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="images/%E5%8D%B8%E8%BD%BD%E6%97%B6.png" class="lozad post-image"src="images/%E5%8D%B8%E8%BD%BD%E6%97%B6.png"></p>
+<h3 id="不常用的钩子函数"><a href="#不常用的钩子函数" class="headerlink" title="不常用的钩子函数"></a>不常用的钩子函数</h3><h4 id="旧版的生命周期钩子函数"><a href="#旧版的生命周期钩子函数" class="headerlink" title="旧版的生命周期钩子函数"></a>旧版的生命周期钩子函数</h4><p><img  srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="images/%E6%97%A7%E7%89%88%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E5%87%BD%E6%95%B0.png" class="lozad post-image"src="images/%E6%97%A7%E7%89%88%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E5%87%BD%E6%95%B0.png"></p>
+<h4 id="新版完整生命会走棋钩子函数"><a href="#新版完整生命会走棋钩子函数" class="headerlink" title="新版完整生命会走棋钩子函数"></a>新版完整生命会走棋钩子函数</h4><p><img  srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="images/%E6%96%B0%E7%89%88%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E5%87%BD%E6%95%B0.png" class="lozad post-image"src="images/%E6%96%B0%E7%89%88%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E5%87%BD%E6%95%B0.png"></p>
+<h5 id="getDerivedStateFromProps"><a href="#getDerivedStateFromProps" class="headerlink" title="getDerivedStateFromProps()"></a><code>getDerivedStateFromProps()</code></h5><ul>
+<li><strong><code>getDerivedStateFromProps</code></strong> 会在调用 render 方法之前调用，并且在初始挂载及后续更新时都会被调用。它应返回一个对象来更新 state，如果返回 null 则不更新任何内容</li>
+<li>不管原因是什么，都会在<em>每次</em>渲染前触发此方法</li>
+</ul>
+<h5 id="shouldComponentUpdate"><a href="#shouldComponentUpdate" class="headerlink" title="shouldComponentUpdate()"></a><code>shouldComponentUpdate()</code></h5><ul>
+<li>根据 <strong><code>shouldComponentUpdate()</code></strong> 的返回值，判断 React 组件的输出是否受当前 state 或 props 更改的影响。默认行为是 state 每次发生变化组件都会重新渲染</li>
+<li>当 props 或 state 发生变化时，**<code>shouldComponentUpdate()</code>** 会在渲染执行之前被调用。返回值默认为 true</li>
+</ul>
+<h5 id="getSnapshotBeforeUpdate"><a href="#getSnapshotBeforeUpdate" class="headerlink" title="getSnapshotBeforeUpdate()"></a><code>getSnapshotBeforeUpdate()</code></h5><ul>
+<li><strong><code>getSnapshotBeforeUpdate()</code></strong> 在最近一次渲染输出（提交到 DOM 节点）之前调用。它使得组件能在发生更改之前从 DOM 中捕获一些信息（例如，滚动位置）。此生命周期的任何返回值将作为参数传递给 <strong><code>componentDidUpdate()</code></strong></li>
+<li>此用法并不常见，但它可能出现在 UI 处理中，如需要以特殊方式处理滚动位置的聊天线程等</li>
+</ul>
+<h1 id="render-props模式-（★★★）"><a href="#render-props模式-（★★★）" class="headerlink" title="render-props模式 （★★★）"></a>render-props模式 （★★★）</h1><h2 id="目标-1"><a href="#目标-1" class="headerlink" title="目标"></a>目标</h2><ul>
+<li>知道render-props模式有什么作用</li>
+<li>能够说出render-props的使用步骤</li>
+</ul>
+<h2 id="React组件复用概述"><a href="#React组件复用概述" class="headerlink" title="React组件复用概述"></a>React组件复用概述</h2><ul>
+<li>思考：如果两个组件中的部分功能相似或相同，该如何处理？</li>
+<li>处理方式：复用相似的功能</li>
+<li>复用什么？<ul>
+<li>state</li>
+<li>操作state的方法</li>
+</ul>
+</li>
+<li>两种方式：<ul>
+<li>render props模式</li>
+<li>高阶组件（HOC）</li>
+</ul>
+</li>
+<li>注意： 这两种方式不是新的API，而是利用React自身特点的编码技巧，演化而成的固定模式</li>
+</ul>
+<h2 id="思路分析"><a href="#思路分析" class="headerlink" title="思路分析"></a>思路分析</h2><ul>
+<li><p>思路：将要复用的state和操作state的方法封装到一个组件中</p>
+</li>
+<li><p>如何拿到该组件中复用的state</p>
+<ul>
+<li><p>在使用组件时，添加一个值为函数的prop，通过函数参数来获取</p>
+<p><img  srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="images/render-props-01.png" class="lozad post-image"src="images/render-props-01.png"></p>
+</li>
+</ul>
+</li>
+<li><p>如何渲染到任意的UI</p>
+<ul>
+<li><p>使用该函数的返回值作为要渲染的UI内容</p>
+<p><img  srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="images/render-props-02.png" class="lozad post-image"src="images/render-props-02.png"></p>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="使用步骤"><a href="#使用步骤" class="headerlink" title="使用步骤"></a>使用步骤</h2><ul>
+<li>创建Mouse组件，在组件中提供复用的逻辑代码</li>
+<li>将要复用的状态作为 props.render(state)方法的参数，暴露到组件外部</li>
+<li>使用props.render() 的返回值作为要渲染的内容</li>
+</ul>
+<p><img  srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="images/render-props%E6%A8%A1%E5%BC%8F-01.png" class="lozad post-image"src="images/render-props%E6%A8%A1%E5%BC%8F-01.png"></p>
+<h4 id="示例demo"><a href="#示例demo" class="headerlink" title="示例demo"></a>示例demo</h4><pre class="highlight"><span class="line">class Mouse extends React.Component &#123;</span><br><span class="line">    // 鼠标位置状态</span><br><span class="line">    state = &#123;</span><br><span class="line">        x: 0,</span><br><span class="line">        y: 0</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    // 监听鼠标移动事件</span><br><span class="line">    componentDidMount()&#123;</span><br><span class="line">        window.addEventListener(&#x27;mousemove&#x27;,this.handleMouseMove)</span><br><span class="line">    &#125;</span><br><span class="line">    handleMouseMove = e =&gt; &#123;</span><br><span class="line">        this.setState(&#123;</span><br><span class="line">            x: e.clientX,</span><br><span class="line">            y: e.clientY</span><br><span class="line">        &#125;)</span><br><span class="line">    &#125;</span><br><span class="line">    render()&#123;</span><br><span class="line">        // 向外界提供当前子组件里面的数据</span><br><span class="line">        return this.props.render(this.state)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">class App extends React.Component &#123;</span><br><span class="line">    render() &#123;</span><br><span class="line">        return (</span><br><span class="line">            &lt;div&gt;</span><br><span class="line">                App</span><br><span class="line">                &lt;Mouse render=&#123;mouse =&gt; &#123;</span><br><span class="line">                    return &lt;p&gt;X&#123;mouse.x&#125;Y&#123;mouse.y&#125;&lt;/p&gt;</span><br><span class="line">                &#125;&#125;/&gt;</span><br><span class="line">            &lt;/div&gt;</span><br><span class="line">        )</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">ReactDOM.render(&lt;App /&gt;,document.getElementById(&#x27;root&#x27;))</span><br></pre>
+
+<h2 id="children代替render属性"><a href="#children代替render属性" class="headerlink" title="children代替render属性"></a>children代替render属性</h2><ul>
+<li>注意：并不是该模式叫 render props就必须使用名为render的prop，实际上可以使用任意名称的prop</li>
+<li>把prop是一个函数并且告诉组件要渲染什么内容的技术叫做： render props模式</li>
+<li>推荐：使用childre代替render属性</li>
+</ul>
+<p><img  srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="images/render-props-children%E6%A8%A1%E5%BC%8F.png" class="lozad post-image"src="images/render-props-children%E6%A8%A1%E5%BC%8F.png"></p>
+<h2 id="优化代码"><a href="#优化代码" class="headerlink" title="优化代码"></a>优化代码</h2><ul>
+<li>推荐给render props模式添加props校验</li>
+</ul>
+<p><img  srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="images/%E4%BC%98%E5%8C%96-%E6%B7%BB%E5%8A%A0%E6%A0%A1%E9%AA%8C.png" class="lozad post-image"src="images/%E4%BC%98%E5%8C%96-%E6%B7%BB%E5%8A%A0%E6%A0%A1%E9%AA%8C.png"></p>
+<p><img  srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="images/%E4%BC%98%E5%8C%96-%E7%A7%BB%E9%99%A4%E4%BA%8B%E4%BB%B6%E7%BB%91%E5%AE%9A.png" class="lozad post-image"src="images/%E4%BC%98%E5%8C%96-%E7%A7%BB%E9%99%A4%E4%BA%8B%E4%BB%B6%E7%BB%91%E5%AE%9A.png"></p>
+<h1 id="高阶组件-（★★★）"><a href="#高阶组件-（★★★）" class="headerlink" title="高阶组件 （★★★）"></a>高阶组件 （★★★）</h1><h2 id="目标-2"><a href="#目标-2" class="headerlink" title="目标"></a>目标</h2><ul>
+<li>知道高阶组件的作用</li>
+<li>能够说出高阶的使用步骤</li>
+</ul>
+<h2 id="概述-1"><a href="#概述-1" class="headerlink" title="概述"></a>概述</h2><ul>
+<li>目的：实现状态逻辑复用</li>
+<li>采用 包装模式</li>
+<li>手机：获取保护功能</li>
+<li>手机壳：提供保护功能</li>
+<li>高阶组件就相当于手机壳，通过包装组件，增强组件功能</li>
+</ul>
+<p><img  srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="images/%E6%89%8B%E6%9C%BA%E5%A3%B3.png" class="lozad post-image"src="images/%E6%89%8B%E6%9C%BA%E5%A3%B3.png"></p>
+<h2 id="思路分析-1"><a href="#思路分析-1" class="headerlink" title="思路分析"></a>思路分析</h2><ul>
+<li>高阶组件(HOC、Higher-Order Component) 是一个函数，接收要包装的组件，返回增强后的组件</li>
+</ul>
+<p><img  srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="images/%E9%AB%98%E9%98%B6%E7%BB%84%E4%BB%B6-%E5%87%BD%E6%95%B0.png" class="lozad post-image"src="images/%E9%AB%98%E9%98%B6%E7%BB%84%E4%BB%B6-%E5%87%BD%E6%95%B0.png"></p>
+<ul>
+<li>高阶组件内部创建了一个类组件，在这个类组件中提供复用的状态逻辑代码，通过prop将复用的状态传递给被包装组件 <code>WrappedComponent</code></li>
+</ul>
+<p><img  srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="images/%E9%AB%98%E9%98%B6%E7%BB%84%E4%BB%B6-%E7%B1%BB%E7%BB%84%E4%BB%B6%E5%86%85%E9%83%A8%E5%AE%9E%E7%8E%B0.png" class="lozad post-image"src="images/%E9%AB%98%E9%98%B6%E7%BB%84%E4%BB%B6-%E7%B1%BB%E7%BB%84%E4%BB%B6%E5%86%85%E9%83%A8%E5%AE%9E%E7%8E%B0.png"></p>
+<h2 id="使用步骤-1"><a href="#使用步骤-1" class="headerlink" title="使用步骤"></a>使用步骤</h2><ul>
+<li>创建一个函数，名称约定以with开头</li>
+<li>指定函数参数，参数应该以大写字母开头</li>
+<li>在函数内部创建一个类组件，提供复用的状态逻辑代码，并返回</li>
+<li>在该组件中，渲染参数组件，同时将状态通过prop传递给参数组件</li>
+<li>调用该高阶组件，传入要增强的组件，通过返回值拿到增强后的组件，并将其渲染到页面</li>
+</ul>
+<p><strong>包装函数</strong></p>
+<pre class="highlight"><span class="line">// 定义一个函数，在函数内部创建一个相应类组件</span><br><span class="line">function withMouse(WrappedComponent) &#123;</span><br><span class="line">    // 该组件提供复用状态逻辑</span><br><span class="line">    class Mouse extends React.Component &#123;</span><br><span class="line">        state = &#123;</span><br><span class="line">            x: 0,</span><br><span class="line">            y: 0</span><br><span class="line">        &#125;</span><br><span class="line">        // 事件的处理函数</span><br><span class="line">        handleMouseMove = (e) =&gt; &#123;</span><br><span class="line">            this.setState(&#123;</span><br><span class="line">                x: e.clientX,</span><br><span class="line">                y: e.clientY</span><br><span class="line">            &#125;)</span><br><span class="line">        &#125;</span><br><span class="line">        // 当组件挂载的时候进行事件绑定</span><br><span class="line">        componentDidMount() &#123;</span><br><span class="line">            window.addEventListener(&#x27;mousemove&#x27;, this.handleMouseMove)</span><br><span class="line">        &#125;</span><br><span class="line">        // 当组件移除时候解绑事件</span><br><span class="line">        componentWillUnmount() &#123;</span><br><span class="line">            window.removeEventListener(&#x27;mousemove&#x27;, this.handleMouseMove)</span><br><span class="line">        &#125;</span><br><span class="line">        render() &#123;</span><br><span class="line">            // 在render函数里面返回传递过来的组件，把当前组件的状态设置进去</span><br><span class="line">            return &lt;WrappedComponent &#123;...this.state&#125; /&gt;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    return Mouse</span><br><span class="line">&#125;</span><br></pre>
+
+<p><strong>哪个组件需要加强，通过调用 <code>withMouse</code>这个函数，然后把返回的值设置到父组件中即可</strong></p>
+<pre class="highlight"><span class="line">function Position(props) &#123;</span><br><span class="line">    return (</span><br><span class="line">        &lt;p&gt;</span><br><span class="line">            X:&#123;props.x&#125;</span><br><span class="line">            Y:&#123;props.y&#125;</span><br><span class="line">        &lt;/p&gt;</span><br><span class="line">    )</span><br><span class="line">&#125;</span><br><span class="line">// 把position 组件来进行包装</span><br><span class="line">let MousePosition = withMouse(Position)</span><br><span class="line"></span><br><span class="line">class App extends React.Component &#123;</span><br><span class="line">    constructor(props) &#123;</span><br><span class="line">        super(props)</span><br><span class="line">    &#125;</span><br><span class="line">    render() &#123;</span><br><span class="line">        return (</span><br><span class="line">            &lt;div&gt;</span><br><span class="line">                高阶组件</span><br><span class="line">                &lt;MousePosition&gt;&lt;/MousePosition&gt;</span><br><span class="line">            &lt;/div&gt;</span><br><span class="line">        )</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre>
+
+<h2 id="设置-displayName"><a href="#设置-displayName" class="headerlink" title="设置 displayName"></a>设置 <code>displayName</code></h2><ul>
+<li>使用高阶组件存在的问题：得到两个组件的名称相同</li>
+<li>原因：默认情况下，React使用组件名称作为 <code>displayName</code></li>
+<li>解决方式：为高阶组件设置 <code>displayName</code>，便于调试时区分不同的组件</li>
+<li><code>displayName的作用：用于设置调试信息(React Developer Tools信息)</code></li>
+<li>设置方式：</li>
+</ul>
+<p><img  srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="images/%E9%AB%98%E9%98%B6%E7%BB%84%E4%BB%B6-displayName.png" class="lozad post-image"src="images/%E9%AB%98%E9%98%B6%E7%BB%84%E4%BB%B6-displayName.png"></p>
+<h2 id="传递props"><a href="#传递props" class="headerlink" title="传递props"></a>传递props</h2><ul>
+<li>问题：如果没有传递props，会导致props丢失问题</li>
+<li>解决方式： 渲染 <code>WrappedComponent</code>时，将state和props一起传递给组件</li>
+</ul>
+<p><img  srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="images/%E4%BC%A0%E9%80%92props.png" class="lozad post-image"src="images/%E4%BC%A0%E9%80%92props.png"></p>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><ul>
+<li>组件通讯是构建React应用必不可少的一环</li>
+<li>props的灵活性让组件更加强大</li>
+<li>状态提升是React组件的常用模式</li>
+<li>组件生命周期有助于理解组件的运行过程</li>
+<li>钩子函数让开发者可以在特定的时机执行某些功能</li>
+<li><code>render props</code> 模式和高阶组件都可以实现组件状态逻辑的复用</li>
+<li>组件极简模型： <code>(state,props) =&gt; UI</code></li>
+</ul>
+<h1 id="React原理"><a href="#React原理" class="headerlink" title="React原理"></a>React原理</h1><h2 id="目标-3"><a href="#目标-3" class="headerlink" title="目标"></a>目标</h2><ul>
+<li>能够知道 <code>setState()</code>更新数据是异步的</li>
+<li>能够知道JSX语法的转化过程</li>
+</ul>
+<h2 id="setState-说明-（★★★）"><a href="#setState-说明-（★★★）" class="headerlink" title="setState()说明 （★★★）"></a><code>setState()</code>说明 （★★★）</h2><h3 id="更新数据"><a href="#更新数据" class="headerlink" title="更新数据"></a>更新数据</h3><ul>
+<li><code>setState()</code>更新数据是异步的</li>
+<li>注意：使用该语法，后面的 <code>setState</code>不要依赖前面 <code>setState</code>的值</li>
+<li>多次调用 <code>setState</code>，只会触发一次render</li>
+</ul>
+<h3 id="推荐语法"><a href="#推荐语法" class="headerlink" title="推荐语法"></a>推荐语法</h3><ul>
+<li>推荐：使用 <code>setState((state,props) =&gt; &#123;&#125;)</code> 语法</li>
+<li>参数state： 表示最新的state</li>
+<li>参数props： 表示最新的props</li>
+</ul>
+<p><img  srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="images/%E6%8E%A8%E8%8D%90%E8%AF%AD%E6%B3%95.png" class="lozad post-image"src="images/%E6%8E%A8%E8%8D%90%E8%AF%AD%E6%B3%95.png"></p>
+<h3 id="第二个参数"><a href="#第二个参数" class="headerlink" title="第二个参数"></a>第二个参数</h3><ul>
+<li>场景：在状态更新(页面完成重新渲染)后立即执行某个操作</li>
+<li>语法：<code>setState(update[,callback])</code></li>
+</ul>
+<p><img  srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="images/%E7%AC%AC%E4%BA%8C%E4%B8%AA%E5%8F%82%E6%95%B0.png" class="lozad post-image"src="images/%E7%AC%AC%E4%BA%8C%E4%B8%AA%E5%8F%82%E6%95%B0.png"></p>
+<h2 id="JSX语法的转化过程-（★★★）"><a href="#JSX语法的转化过程-（★★★）" class="headerlink" title="JSX语法的转化过程 （★★★）"></a>JSX语法的转化过程 （★★★）</h2><ul>
+<li>JSX仅仅是 <code>createElement()</code> 方法的语法糖(简化语法)</li>
+<li>JSX语法被 @babel/preset-react 插件编译为 <code>createElement()</code> 方法</li>
+<li>React 元素： 是一个对象，用来描述你希望在屏幕上看到的内容</li>
+</ul>
+<p><img  srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="images/%E8%AF%AD%E6%B3%95%E7%B3%96.png" class="lozad post-image"src="images/%E8%AF%AD%E6%B3%95%E7%B3%96.png"></p>
+
+  </div>
+  <div>
+    
+      <div 
+        class="post-note note-warning copyright" 
+        style="margin-top: 42px">
+        <p>
+          <span style="font-weight: bold;">作者：</span><a 
+            target="_blank" 
+            rel="nofollow noopener noreferrer" 
+            href="/about">
+            theme-kaze
+          </a>
+        </p>
+        <p>
+          <span style="font-weight: bold;">文章链接：</span><a 
+            target="_blank" 
+            rel="nofollow noopener noreferrer" 
+            href="http://example.com/2023/04/24/react%E5%9F%BA%E7%A1%80Day03-%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F&amp;render%20props%E6%A8%A1%E5%BC%8F&amp;%E9%AB%98%E9%98%B6%E7%BB%84%E4%BB%B6&amp;%E5%8E%9F%E7%90%86%E6%8F%AD%E7%A7%98/">
+            http://example.com/2023/04/24/react%E5%9F%BA%E7%A1%80Day03-%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F&amp;render%20props%E6%A8%A1%E5%BC%8F&amp;%E9%AB%98%E9%98%B6%E7%BB%84%E4%BB%B6&amp;%E5%8E%9F%E7%90%86%E6%8F%AD%E7%A7%98/
+          </a>
+        </p>
+        <p><span style="font-weight: bold;">版权声明：</span>本博客所有文章除特别声明外，均采用<a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">CC BY-NC-SA 4.0 协议</a>。转载请注明出处！</p>
+      </div>
+    
+  </div>
+</article>
+<div class="nav">
+  
+    <div class="nav-item-prev">
+      <a 
+        href="/2023/04/24/react%E5%9F%BA%E7%A1%80Day02-%E5%8F%97%E6%8E%A7%E7%BB%84%E4%BB%B6&amp;%E8%AF%84%E8%AE%BA%E6%A1%88%E4%BE%8B&amp;props&amp;context/" 
+        class="nav-link">
+        <i class="iconfont icon-left nav-prev-icon"></i>
+        <div>
+          <div class="nav-label">上一篇</div>
+          
+            <div class="nav-title">Hello World </div>
+          
+        </div>
+      </a>
+    </div>
+  
+  
+    <div class="nav-item-next">
+      <a 
+        href="/2023/04/24/hello-world/" 
+        class="nav-link">
+        <div>
+          <div class="nav-label">下一篇</div>
+          
+            <div class="nav-title">Hello World </div>
+          
+        </div>
+        <i class="iconfont icon-right nav-next-icon"></i>
+      </a>
+    </div>
+  
+</div>
+
+<div 
+  class="card card-content toc-card" 
+  id="mobiletoc">
+  <div class="toc-header">
+  <i 
+    class="iconfont icon-menu" 
+    style="padding-right: 2px;">
+  </i>目录
+</div>
+<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%BB%84%E4%BB%B6%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%EF%BC%88%E2%98%85%E2%98%85%E2%98%85%EF%BC%89"><span class="toc-text">组件生命周期（★★★）</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%9B%AE%E6%A0%87"><span class="toc-text">目标</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A6%82%E8%BF%B0"><span class="toc-text">概述</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E9%98%B6%E6%AE%B5"><span class="toc-text">生命周期阶段</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E6%97%B6%EF%BC%88%E6%8C%82%E8%BD%BD%E9%98%B6%E6%AE%B5%EF%BC%89"><span class="toc-text">创建时（挂载阶段）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9B%B4%E6%96%B0%E6%97%B6"><span class="toc-text">更新时</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8D%B8%E8%BD%BD%E6%97%B6"><span class="toc-text">卸载时</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%8D%E5%B8%B8%E7%94%A8%E7%9A%84%E9%92%A9%E5%AD%90%E5%87%BD%E6%95%B0"><span class="toc-text">不常用的钩子函数</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%97%A7%E7%89%88%E7%9A%84%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E9%92%A9%E5%AD%90%E5%87%BD%E6%95%B0"><span class="toc-text">旧版的生命周期钩子函数</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%96%B0%E7%89%88%E5%AE%8C%E6%95%B4%E7%94%9F%E5%91%BD%E4%BC%9A%E8%B5%B0%E6%A3%8B%E9%92%A9%E5%AD%90%E5%87%BD%E6%95%B0"><span class="toc-text">新版完整生命会走棋钩子函数</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#getDerivedStateFromProps"><span class="toc-text">getDerivedStateFromProps()</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#shouldComponentUpdate"><span class="toc-text">shouldComponentUpdate()</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#getSnapshotBeforeUpdate"><span class="toc-text">getSnapshotBeforeUpdate()</span></a></li></ol></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#render-props%E6%A8%A1%E5%BC%8F-%EF%BC%88%E2%98%85%E2%98%85%E2%98%85%EF%BC%89"><span class="toc-text">render-props模式 （★★★）</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%9B%AE%E6%A0%87-1"><span class="toc-text">目标</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#React%E7%BB%84%E4%BB%B6%E5%A4%8D%E7%94%A8%E6%A6%82%E8%BF%B0"><span class="toc-text">React组件复用概述</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%9D%E8%B7%AF%E5%88%86%E6%9E%90"><span class="toc-text">思路分析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E6%AD%A5%E9%AA%A4"><span class="toc-text">使用步骤</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%A4%BA%E4%BE%8Bdemo"><span class="toc-text">示例demo</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#children%E4%BB%A3%E6%9B%BFrender%E5%B1%9E%E6%80%A7"><span class="toc-text">children代替render属性</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BC%98%E5%8C%96%E4%BB%A3%E7%A0%81"><span class="toc-text">优化代码</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E9%AB%98%E9%98%B6%E7%BB%84%E4%BB%B6-%EF%BC%88%E2%98%85%E2%98%85%E2%98%85%EF%BC%89"><span class="toc-text">高阶组件 （★★★）</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%9B%AE%E6%A0%87-2"><span class="toc-text">目标</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A6%82%E8%BF%B0-1"><span class="toc-text">概述</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%9D%E8%B7%AF%E5%88%86%E6%9E%90-1"><span class="toc-text">思路分析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E6%AD%A5%E9%AA%A4-1"><span class="toc-text">使用步骤</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AE%BE%E7%BD%AE-displayName"><span class="toc-text">设置 displayName</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BC%A0%E9%80%92props"><span class="toc-text">传递props</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B0%8F%E7%BB%93"><span class="toc-text">小结</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#React%E5%8E%9F%E7%90%86"><span class="toc-text">React原理</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%9B%AE%E6%A0%87-3"><span class="toc-text">目标</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#setState-%E8%AF%B4%E6%98%8E-%EF%BC%88%E2%98%85%E2%98%85%E2%98%85%EF%BC%89"><span class="toc-text">setState()说明 （★★★）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9B%B4%E6%96%B0%E6%95%B0%E6%8D%AE"><span class="toc-text">更新数据</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8E%A8%E8%8D%90%E8%AF%AD%E6%B3%95"><span class="toc-text">推荐语法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AC%AC%E4%BA%8C%E4%B8%AA%E5%8F%82%E6%95%B0"><span class="toc-text">第二个参数</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#JSX%E8%AF%AD%E6%B3%95%E7%9A%84%E8%BD%AC%E5%8C%96%E8%BF%87%E7%A8%8B-%EF%BC%88%E2%98%85%E2%98%85%E2%98%85%EF%BC%89"><span class="toc-text">JSX语法的转化过程 （★★★）</span></a></li></ol></li></ol>
+</div>
+            </main>
+            <aside class="right-column">
+              <div class="sticky-widescreen">
+  
+  
+    <article class="card card-content toc-card">
+      <div class="toc-header">
+  <i 
+    class="iconfont icon-menu" 
+    style="padding-right: 2px;">
+  </i>目录
+</div>
+<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%BB%84%E4%BB%B6%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%EF%BC%88%E2%98%85%E2%98%85%E2%98%85%EF%BC%89"><span class="toc-text">组件生命周期（★★★）</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%9B%AE%E6%A0%87"><span class="toc-text">目标</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A6%82%E8%BF%B0"><span class="toc-text">概述</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E9%98%B6%E6%AE%B5"><span class="toc-text">生命周期阶段</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E6%97%B6%EF%BC%88%E6%8C%82%E8%BD%BD%E9%98%B6%E6%AE%B5%EF%BC%89"><span class="toc-text">创建时（挂载阶段）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9B%B4%E6%96%B0%E6%97%B6"><span class="toc-text">更新时</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8D%B8%E8%BD%BD%E6%97%B6"><span class="toc-text">卸载时</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%8D%E5%B8%B8%E7%94%A8%E7%9A%84%E9%92%A9%E5%AD%90%E5%87%BD%E6%95%B0"><span class="toc-text">不常用的钩子函数</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%97%A7%E7%89%88%E7%9A%84%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E9%92%A9%E5%AD%90%E5%87%BD%E6%95%B0"><span class="toc-text">旧版的生命周期钩子函数</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%96%B0%E7%89%88%E5%AE%8C%E6%95%B4%E7%94%9F%E5%91%BD%E4%BC%9A%E8%B5%B0%E6%A3%8B%E9%92%A9%E5%AD%90%E5%87%BD%E6%95%B0"><span class="toc-text">新版完整生命会走棋钩子函数</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#getDerivedStateFromProps"><span class="toc-text">getDerivedStateFromProps()</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#shouldComponentUpdate"><span class="toc-text">shouldComponentUpdate()</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#getSnapshotBeforeUpdate"><span class="toc-text">getSnapshotBeforeUpdate()</span></a></li></ol></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#render-props%E6%A8%A1%E5%BC%8F-%EF%BC%88%E2%98%85%E2%98%85%E2%98%85%EF%BC%89"><span class="toc-text">render-props模式 （★★★）</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%9B%AE%E6%A0%87-1"><span class="toc-text">目标</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#React%E7%BB%84%E4%BB%B6%E5%A4%8D%E7%94%A8%E6%A6%82%E8%BF%B0"><span class="toc-text">React组件复用概述</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%9D%E8%B7%AF%E5%88%86%E6%9E%90"><span class="toc-text">思路分析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E6%AD%A5%E9%AA%A4"><span class="toc-text">使用步骤</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%A4%BA%E4%BE%8Bdemo"><span class="toc-text">示例demo</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#children%E4%BB%A3%E6%9B%BFrender%E5%B1%9E%E6%80%A7"><span class="toc-text">children代替render属性</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BC%98%E5%8C%96%E4%BB%A3%E7%A0%81"><span class="toc-text">优化代码</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E9%AB%98%E9%98%B6%E7%BB%84%E4%BB%B6-%EF%BC%88%E2%98%85%E2%98%85%E2%98%85%EF%BC%89"><span class="toc-text">高阶组件 （★★★）</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%9B%AE%E6%A0%87-2"><span class="toc-text">目标</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A6%82%E8%BF%B0-1"><span class="toc-text">概述</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%9D%E8%B7%AF%E5%88%86%E6%9E%90-1"><span class="toc-text">思路分析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E6%AD%A5%E9%AA%A4-1"><span class="toc-text">使用步骤</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AE%BE%E7%BD%AE-displayName"><span class="toc-text">设置 displayName</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BC%A0%E9%80%92props"><span class="toc-text">传递props</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B0%8F%E7%BB%93"><span class="toc-text">小结</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#React%E5%8E%9F%E7%90%86"><span class="toc-text">React原理</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%9B%AE%E6%A0%87-3"><span class="toc-text">目标</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#setState-%E8%AF%B4%E6%98%8E-%EF%BC%88%E2%98%85%E2%98%85%E2%98%85%EF%BC%89"><span class="toc-text">setState()说明 （★★★）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9B%B4%E6%96%B0%E6%95%B0%E6%8D%AE"><span class="toc-text">更新数据</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8E%A8%E8%8D%90%E8%AF%AD%E6%B3%95"><span class="toc-text">推荐语法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AC%AC%E4%BA%8C%E4%B8%AA%E5%8F%82%E6%95%B0"><span class="toc-text">第二个参数</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#JSX%E8%AF%AD%E6%B3%95%E7%9A%84%E8%BD%AC%E5%8C%96%E8%BF%87%E7%A8%8B-%EF%BC%88%E2%98%85%E2%98%85%E2%98%85%EF%BC%89"><span class="toc-text">JSX语法的转化过程 （★★★）</span></a></li></ol></li></ol>
+    </article>
+  
+  
+  <article class="card card-content">
+    <div class="recent-posts-card">
+  <div class="recent-posts-header">
+    <i 
+      class="iconfont icon-wenzhang_huaban" 
+      style="padding-right: 2px;">
+    </i>最近文章
+  </div>
+  <div class="recent-posts-list">
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2023-04-24</div>
+        <a href="/2023/04/24/js%E5%BC%82%E6%AD%A5%E5%A4%84%E7%90%86%E6%96%B9%E6%A1%88%EF%BC%8Cjs%E7%9A%84%E5%BC%82%E6%AD%A5%E4%B8%B2%E8%A1%8C%E4%B8%8E%E5%BC%82%E6%AD%A5%E5%B9%B6%E8%A1%8C/"><div class="recent-posts-item-content">js的异步串行与异步并行</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2023-04-24</div>
+        <a href="/2023/04/24/03-hooks%E8%BF%9B%E9%98%B6/"><div class="recent-posts-item-content">hooks进阶</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2023-04-24</div>
+        <a href="/2023/04/24/02-hooks%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/"><div class="recent-posts-item-content">hooks基本使用</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2023-04-24</div>
+        <a href="/2023/04/24/01-react-%E7%BB%84%E4%BB%B6%E5%A4%8D%E7%94%A8/"><div class="recent-posts-item-content">组件复用的说明</div></a>
+      </div>
+    
+  </div>
+</div>
+  </article>
+  
+  
+</div>
+            </aside>
+          </div>
+        </div>
+      </div>
+    </div>
+     
+    <footer class="footer">
+  <div class="footer-container">
+    <div>
+      <div class="footer-dsc">
+        <span>
+          Copyright ©
+          
+            2020
+          
+          
+                - 
+                2023
+          
+        </span>
+        &nbsp;
+        <a 
+          href="/" 
+          class="footer-link">
+          Theme Kaze
+        </a>
+      </div>
+    </div>
+
+    
+      <div class="footer-dsc">
+        
+          Powered by
+          <a 
+            href="https://hexo.io/" 
+            class="footer-link" 
+            target="_blank" 
+            rel="nofollow noopener noreferrer">
+            &nbsp;Hexo
+          </a>
+        
+        
+          <span>&nbsp;|&nbsp;</span>
+        
+        
+          Theme -
+          <a 
+            href="https://github.com/theme-kaze" 
+            class="footer-link" 
+            target="_blank"
+            rel="nofollow noopener noreferrer">
+            &nbsp;Kaze
+          </a>
+        
+      </div>
+    
+    
+    
+    
+</footer>
+ 
+    
+  <a 
+    role="button" 
+    id="scrollbutton" 
+    class="basebutton" 
+    aria-label="回到顶部">
+    <i class="iconfont icon-arrowleft button-icon"></i>
+  </a>
+
+<a 
+  role="button" 
+  id="menubutton"
+  aria-label="menu button"
+  class="basebutton">
+  <i class="iconfont icon-menu button-icon"></i>
+</a>
+<a 
+  role="button" 
+  id="popbutton" 
+  class="basebutton" 
+  aria-label="控制中心">
+  <i class="iconfont icon-expand button-icon"></i>
+</a>
+<a 
+  role="button" 
+  id="darkbutton" 
+  class="basebutton darkwidget" 
+  aria-label="夜色模式">
+  <i class="iconfont icon-weather button-icon"></i>
+</a>
+<a 
+  role="button" 
+  id="searchbutton" 
+  class="basebutton searchwidget" 
+  aria-label="搜索">
+  <i class="iconfont icon-search button-icon"></i>
+</a> 
+     
+     
+     
+      <script>
+  var addImgLayout = function () {
+    var img = document.querySelectorAll('.post-content img')
+    var i
+    for (i = 0; i < img.length; i++) {
+      var wrapper = document.createElement('a')
+      wrapper.setAttribute('href', img[i].getAttribute('data-src'))
+      wrapper.setAttribute('aria-label', 'illustration')
+      wrapper.style.cssText =
+        'width: 100%; display: flex; justify-content: center;'
+      if (img[i].alt) wrapper.dataset.caption = img[i].alt
+      wrapper.dataset.nolink = true
+      img[i].before(wrapper)
+      wrapper.append(img[i])
+      var divWrap = document.createElement('div')
+      divWrap.classList.add('gallery')
+      wrapper.before(divWrap)
+      divWrap.append(wrapper)
+    }
+    baguetteBox.run('.gallery')
+  }
+</script>
+<script>
+  loadScript(
+    "/js/lib/lightbox/baguetteBox.min.js",
+    addImgLayout
+  )
+</script>
+ 
+     
+     
+    <script src="/js/main.js"></script> 
+     
+    
+      <script>
+        var addLazyload = function () {
+          var observer = lozad('.lozad', {
+            load: function (el) {
+              el.srcset = el.getAttribute('data-src')
+            },
+            loaded: function (el) {
+              el.classList.add('loaded')
+            },
+          })
+          observer.observe()
+        }
+      </script>
+      <script>
+        loadScript('/js/lib/lozad.min.js', addLazyload)
+      </script>
+    
+    <script src="//instant.page/5.1.0" type="module"
+      integrity="sha384-by67kQnR+pyfy8yWP4kPO12fHKRLHZPfEsiSXR8u2IKcTdxD805MGUXBzVPnkLHw"></script>
+    
+    
+  </body>
+</html>

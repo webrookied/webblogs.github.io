@@ -1,0 +1,846 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+  <meta charset="UTF-8">
+  <meta 
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+  <meta 
+    http-equiv="X-UA-Compatible" 
+    content="ie=edge">
+  <meta 
+    name="theme-color" 
+    content="#fff" 
+    id="theme-color">
+  <meta 
+    name="description" 
+    content="Hexo">
+  <link 
+    rel="icon" 
+    href="/">
+  <title>组件通讯</title>
+  
+    
+      <meta 
+        property="og:title" 
+        content="组件通讯">
+    
+    
+      <meta 
+        property="og:url" 
+        content="http://example.com/2023/04/24/03-%E7%BB%84%E4%BB%B6%E9%80%9A%E8%AE%AF/index.html">
+    
+    
+      <meta 
+        property="og:img" 
+        content="https://img.songhn.com/img/Y67gdd.png">
+    
+    
+    
+      <meta 
+        property="og:type" 
+        content="article">
+      <meta 
+        property="og:article:published_time" 
+        content="2023-04-24">
+      <meta 
+        property="og:article:modified_time" 
+        content="2023-04-24">
+      <meta 
+        property="og:article:author" 
+        content="theme-kaze">
+      
+        
+      
+    
+  
+  
+  <link rel="preload" href="//at.alicdn.com/t/font_1946621_i1kgafibvw.css" as="style" >
+  <link rel="preload" href="//at.alicdn.com/t/font_1952792_89b4ac4k4up.css" as="style" >
+  <link rel="preload" href="/css/main.css" as="style" >
+  
+  <link rel="modulepreload" href="//instant.page/5.1.0">
+  
+  <link rel="stylesheet" href="/css/main.css">
+  
+  <link rel="stylesheet" href="//at.alicdn.com/t/font_1946621_i1kgafibvw.css">
+  
+  <link rel="stylesheet" href="//at.alicdn.com/t/font_1952792_89b4ac4k4up.css">
+  
+  
+  
+    <link rel="stylesheet" href="/js/lib/lightbox/baguetteBox.min.css">
+  
+  <script>
+    function loadScript(url, cb) {
+      var script = document.createElement('script');
+      script.src = url;
+      if (cb) script.onload = cb;
+      script.async = true;
+      document.body.appendChild(script);
+    }
+    function loadCSS(href, data, attr) {
+      var sheet = document.createElement('link');
+      sheet.ref = 'stylesheet';
+      sheet.href = href;
+      sheet.dataset[data] = attr;
+      document.head.appendChild(sheet);
+    }
+    function changeCSS(cssFile, data, attr) {
+      var oldlink = document.querySelector(data);
+      var newlink = document.createElement("link");
+      newlink.setAttribute("rel", "stylesheet");
+      newlink.setAttribute("href", cssFile);
+      newlink.dataset.prism = attr;
+      document.head.replaceChild(newlink, oldlink);
+    }
+  </script>
+  
+    
+  
+  <script>
+    // control reverse button
+    var reverseDarkList = {
+      dark: 'light',
+      light: 'dark'
+    };
+    var themeColor = {
+      dark: '#1c1c1e',
+      light: '#fff'
+    }
+    // get the data of css prefers-color-scheme
+    var getCssMediaQuery = function() {
+      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    };
+    // reverse current darkmode setting function
+    var reverseDarkModeSetting = function() {
+      var setting = localStorage.getItem('user-color-scheme');
+      if(reverseDarkList[setting]) {
+        setting = reverseDarkList[setting];
+      } else if(setting === null) {
+        setting = reverseDarkList[getCssMediaQuery()];
+      } else {
+        return;
+      }
+      localStorage.setItem('user-color-scheme', setting);
+      return setting;
+    };
+    // apply current darkmode setting
+  </script>
+  
+    <script>
+      var setDarkmode = function(mode) {
+      var setting = mode || localStorage.getItem('user-color-scheme');
+      if(setting === getCssMediaQuery()) {
+        document.documentElement.removeAttribute('data-user-color-scheme');
+        localStorage.removeItem('user-color-scheme');
+        document.getElementById('theme-color').content = themeColor[setting];
+        document.getElementById('theme-color').dataset.mode = setting;
+      } else if(reverseDarkList[setting]) {
+        document.documentElement.setAttribute('data-user-color-scheme', setting);
+        document.getElementById('theme-color').content = themeColor[setting];
+        document.getElementById('theme-color').dataset.mode = setting;
+      } else {
+        document.documentElement.removeAttribute('data-user-color-scheme');
+        localStorage.removeItem('user-color-scheme');
+        document.getElementById('theme-color').content = themeColor[getCssMediaQuery()];
+        document.getElementById('theme-color').dataset.mode = getCssMediaQuery();
+      }
+    };
+    setDarkmode();
+    </script>
+  
+  
+  
+    <link rel="preload" href="/js/lib/lightbox/baguetteBox.min.js" as="script">
+    <link rel="preload" href="/js/lib/lightbox/baguetteBox.min.css" as="style" >
+  
+  
+    <link rel="preload" href="/js/lib/lozad.min.js" as="script">
+  
+  
+  
+  
+  
+  
+<meta name="generator" content="Hexo 5.4.2"><link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+</head>
+
+  <body>
+    <div class="wrapper">
+       
+      <nav class="navbar">
+  <div class="navbar-logo">
+    <a class="navbar-logo-main" href="/">
+      
+      <span class="navbar-logo-dsc">Theme Kaze</span>
+      </a>
+  </div>
+  <div class="navbar-menu">
+    
+      <a 
+        href="/" 
+        class="navbar-menu-item">
+        
+          首页
+        
+      </a>
+    
+      <a 
+        href="/archives" 
+        class="navbar-menu-item">
+        
+          归档
+        
+      </a>
+    
+      <a 
+        href="/tags" 
+        class="navbar-menu-item">
+        
+          标签
+        
+      </a>
+    
+      <a 
+        href="/categories" 
+        class="navbar-menu-item">
+        
+          分类
+        
+      </a>
+    
+      <a 
+        href="/about" 
+        class="navbar-menu-item">
+        
+          关于
+        
+      </a>
+    
+      <a 
+        href="/links" 
+        class="navbar-menu-item">
+        
+          友链
+        
+      </a>
+    
+    <button 
+      class="navbar-menu-item darknavbar navbar-menu-btn" 
+      aria-label="Toggle dark mode"
+      id="dark">
+      <i class="iconfont icon-weather"></i>
+    </button>
+    <button 
+      class="navbar-menu-item searchnavbar navbar-menu-btn" 
+      aria-label="Toggle search"
+      id="search">
+      <!-- <i 
+        class="iconfont icon-search" 
+        style="font-size: 1.2rem; font-weight: 400;">
+      </i> -->
+      <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img"
+        class="iconify iconify--ion" width="28" height="28" preserveAspectRatio="xMidYMid meet" viewBox="0 0 512 512">
+        <path fill="none" stroke="currentColor" stroke-miterlimit="10" stroke-width="28"
+          d="M256 80a176 176 0 1 0 176 176A176 176 0 0 0 256 80Z"></path>
+        <path fill="none" stroke="currentColor" stroke-miterlimit="10" stroke-width="28"
+          d="M232 160a72 72 0 1 0 72 72a72 72 0 0 0-72-72Z"></path>
+        <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-miterlimit="10" stroke-width="28"
+          d="M283.64 283.64L336 336"></path>
+      </svg>
+    </button>
+  </div>
+</nav> 
+      
+      <div 
+        id="local-search" 
+        style="display: none">
+        <input
+          class="navbar-menu-item"
+          id="search-input"
+          placeholder="请输入搜索内容..." />
+        <div id="search-content"></div>
+      </div>
+      
+      <div class="section-wrap">
+        <div class="container">
+          <div class="columns">
+            <aside class="left-column">
+              
+              <div class="card card-author">
+                
+  <img 
+    src="https://img.songhn.com/img/Y67gdd.png" 
+    class="author-img"
+    width="88"
+    height="88"
+    alt="author avatar">
+
+<p class="author-name">theme-kaze</p>
+<p class="author-description">designed by theme-kaze</p>
+<div class="author-message">
+  <a 
+    class="author-posts-count" 
+    href="/archives">
+    <span>14</span>
+    <span>文章</span>
+  </a>
+  <a 
+    class="author-categories-count" 
+    href="/categories">
+    <span>3</span>
+    <span>分类</span>
+  </a>
+  <a 
+    class="author-tags-count" 
+    href="/tags">
+    <span>0</span>
+    <span>标签</span>
+  </a>
+</div>
+
+              </div>
+               <div class="sticky-tablet">
+  
+  
+    <article class="display-when-two-columns spacer">
+      <div class="card card-content toc-card">
+        <div class="toc-header">
+  <i 
+    class="iconfont icon-menu" 
+    style="padding-right: 2px;">
+  </i>目录
+</div>
+<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%AD%A6%E4%B9%A0%E7%9B%AE%E6%A0%87"><span class="toc-text">学习目标</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%BB%84%E4%BB%B6%E9%80%9A%E8%AE%AF"><span class="toc-text">组件通讯</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#props"><span class="toc-text">props</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%87%BD%E6%95%B0%E7%BB%84%E4%BB%B6%E9%80%9A%E8%AE%AF"><span class="toc-text">函数组件通讯</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%B1%BB%E7%BB%84%E4%BB%B6%E9%80%9A%E8%AE%AF"><span class="toc-text">类组件通讯</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#props%E7%9A%84%E7%89%B9%E7%82%B9"><span class="toc-text">props的特点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BB%84%E4%BB%B6%E9%80%9A%E8%AE%AF%E4%B8%89%E7%A7%8D%E6%96%B9%E5%BC%8F"><span class="toc-text">组件通讯三种方式</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%88%B6%E4%BC%A0%E5%AD%90"><span class="toc-text">父传子</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AF%84%E8%AE%BA%E5%88%97%E8%A1%A8%E6%A1%88%E4%BE%8B"><span class="toc-text">评论列表案例</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AD%90%E4%BC%A0%E7%88%B6"><span class="toc-text">子传父</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%84%E5%BC%9F%E7%BB%84%E4%BB%B6"><span class="toc-text">兄弟组件</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BB%84%E4%BB%B6%E9%80%9A%E8%AE%AF-context"><span class="toc-text">组件通讯-context</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5"><span class="toc-text">基本概念</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%9E%E7%8E%B0%E6%80%9D%E8%B7%AF"><span class="toc-text">实现思路</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#redux"><span class="toc-text">redux</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#props%E6%B7%B1%E5%85%A5"><span class="toc-text">props深入</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#children%E5%B1%9E%E6%80%A7"><span class="toc-text">children属性</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#props%E6%A0%A1%E9%AA%8C"><span class="toc-text">props校验</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E6%AD%A5%E9%AA%A4"><span class="toc-text">使用步骤</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BA%A6%E6%9D%9F%E8%A7%84%E5%88%99"><span class="toc-text">约束规则</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#props%E9%BB%98%E8%AE%A4%E5%80%BC"><span class="toc-text">props默认值</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%B1%BB%E7%9A%84%E9%9D%99%E6%80%81%E5%B1%9E%E6%80%A7static"><span class="toc-text">类的静态属性static</span></a></li></ol></li></ol>
+      </div>
+    </article>
+  
+  
+  <article class="card card-content categories-widget">
+    <div class="categories-card">
+  <div class="categories-header">
+    <i 
+      class="iconfont icon-fenlei" 
+      style="padding-right: 2px;">
+    </i>分类
+  </div>
+  <div class="categories-list">
+    
+      <a href="/categories/hooks/">
+        <div class="categories-list-item">
+          hooks
+          <span class="categories-list-item-badge">2</span>
+        </div>
+      </a>
+    
+      <a href="/categories/React/">
+        <div class="categories-list-item">
+          React
+          <span class="categories-list-item-badge">6</span>
+        </div>
+      </a>
+    
+      <a href="/categories/js/">
+        <div class="categories-list-item">
+          js
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+  </div>
+</div>
+  </article>
+  
+  <article class="card card-content tags-widget">
+    <div class="tags-card">
+  <div class="tags-header">
+    <i 
+      class="iconfont icon-biaoqian" 
+      style="padding-right: 2px;">
+    </i>热门标签
+  </div>
+  <div class="tags-list">
+    
+  </div>
+</div>
+  </article>
+  
+  
+</div>
+            </aside>
+            <main class="main-column">
+              
+<article class="card card-content">
+  <header>
+    <h1 class="post-title">
+      组件通讯
+    </h1>
+  </header>
+  <div class="post-meta post-show-meta">
+    <time datetime="2023-04-24T11:14:22.808Z">
+      <i 
+        class="iconfont icon-calendar" 
+        style="margin-right: 2px;">
+      </i>
+      <span>2023-04-24</span>
+    </time>
+    
+      <span class="dot"></span>
+      
+        <a 
+          href="/categories/React/" 
+          class="post-meta-link">
+          React
+        </a>
+      
+    
+    
+      <span class="dot"></span>
+      <span>1.8k 字</span>
+    
+  </div>
+  
+  </header>
+  <div 
+    id="section" 
+    class="post-content">
+    <h1 id="学习目标"><a href="#学习目标" class="headerlink" title="学习目标"></a>学习目标</h1><ul>
+<li>组件通讯介绍以及为什么要有组件通讯</li>
+<li>组件的props</li>
+<li>组件通讯的三种方式 父传子  子传父  兄弟组件</li>
+<li>Context组件通讯</li>
+<li>props深入</li>
+</ul>
+<h1 id="组件通讯"><a href="#组件通讯" class="headerlink" title="组件通讯"></a>组件通讯</h1><p><strong>组件</strong>是独立且封闭的单元，默认情况下，只能使用组件自己的数据。在组件化过程中，我们将一个完整的功能<br>拆分成多个组件，以更好的完成整个应用的功能。而在这个过程中，多个组件之间不可避免的要共享某些数据<br>。为了实现这些功能，就需要打破组件的独立封闭性，让其与外界沟通。这个过程就是<strong>组件通讯</strong>。</p>
+<h2 id="props"><a href="#props" class="headerlink" title="props"></a>props</h2><ul>
+<li>组件是封闭的，要接收外部数据应该通过props来实现</li>
+<li><strong>props的作用：接收传递给组件的数据</strong></li>
+<li>传递数据：给组件标签添加属性</li>
+<li>接收数据：函数组件通过参数props接收数据，类组件通过this.props接收数据</li>
+</ul>
+<h3 id="函数组件通讯"><a href="#函数组件通讯" class="headerlink" title="函数组件通讯"></a>函数组件通讯</h3><p>子组件</p>
+<pre class="highlight"><span class="line"><span class="keyword">function</span> <span class="title function_">Hello</span>(<span class="params">props</span>) &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(props)</span><br><span class="line">    <span class="keyword">return</span> (</span><br><span class="line">    	<span class="language-xml"><span class="tag">&lt;<span class="name">div</span>&gt;</span>接收到数据：&#123;props.name&#125;<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br><span class="line">    )</span><br><span class="line">&#125;</span><br></pre>
+
+<p>父组件</p>
+<pre class="highlight"><span class="line">&lt;<span class="title class_">Hello</span> name=<span class="string">&quot;jack&quot;</span> age=&#123;<span class="number">19</span>&#125; /&gt;</span><br></pre>
+
+<h3 id="类组件通讯"><a href="#类组件通讯" class="headerlink" title="类组件通讯"></a>类组件通讯</h3><p>子组件</p>
+<pre class="highlight"><span class="line"><span class="keyword">class</span> <span class="title class_">Hello</span> <span class="keyword">extends</span> <span class="title class_ inherited__">React.Component</span> &#123;</span><br><span class="line">    <span class="title function_">render</span>(<span class="params"></span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> (</span><br><span class="line">        	<span class="language-xml"><span class="tag">&lt;<span class="name">div</span>&gt;</span>接收到的数据：&#123;this.props.age&#125;<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br><span class="line">        )</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre>
+
+<p>父组件</p>
+<pre class="highlight"><span class="line">&lt;<span class="title class_">Hello</span> name=<span class="string">&quot;jack&quot;</span> age=&#123;<span class="number">19</span>&#125; /&gt;</span><br></pre>
+
+<h3 id="props的特点"><a href="#props的特点" class="headerlink" title="props的特点"></a>props的特点</h3><ul>
+<li><p>可以给组件传递任意类型的数据</p>
+</li>
+<li><p>props是只读的，不允许修改props的数据</p>
+</li>
+<li><p>注意：在类组件中使用的时候，**需要把props传递给super()**，否则构造函数无法获取到props</p>
+</li>
+</ul>
+<pre class="highlight"><span class="line"><span class="keyword">class</span> <span class="title class_">Hello</span> <span class="keyword">extends</span> <span class="title class_ inherited__">React.Component</span> &#123;</span><br><span class="line">    <span class="title function_">constructor</span>(<span class="params">props</span>) &#123;</span><br><span class="line">        <span class="comment">// 推荐将props传递给父类构造函数</span></span><br><span class="line">        <span class="variable language_">super</span>(props)</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="title function_">render</span>(<span class="params"></span>) &#123;</span><br><span class="line">    	<span class="keyword">return</span> <span class="language-xml"><span class="tag">&lt;<span class="name">div</span>&gt;</span>接收到的数据：&#123;this.props.age&#125;<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre>
+
+<h2 id="组件通讯三种方式"><a href="#组件通讯三种方式" class="headerlink" title="组件通讯三种方式"></a>组件通讯三种方式</h2><ul>
+<li>父传子</li>
+<li>子传父</li>
+<li>非父子</li>
+</ul>
+<h3 id="父传子"><a href="#父传子" class="headerlink" title="父传子"></a>父传子</h3><ol>
+<li>父组件提供要传递的state数据</li>
+<li>给子组件标签添加属性，值为 state 中的数据</li>
+<li>子组件中通过 props 接收父组件中传递的数据</li>
+</ol>
+<p>父组件提供数据并且传递给子组件</p>
+<pre class="highlight"><span class="line"><span class="keyword">class</span> <span class="title class_">Parent</span> <span class="keyword">extends</span> <span class="title class_ inherited__">React.Component</span> &#123;</span><br><span class="line">    state = &#123; <span class="attr">lastName</span>: <span class="string">&#x27;王&#x27;</span> &#125;</span><br><span class="line">    <span class="title function_">render</span>(<span class="params"></span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> (</span><br><span class="line">            <span class="language-xml"><span class="tag">&lt;<span class="name">div</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">                传递数据给子组件：<span class="tag">&lt;<span class="name">Child</span> <span class="attr">name</span>=<span class="string">&#123;this.state.lastName&#125;</span> /&gt;</span></span></span><br><span class="line"><span class="language-xml">            <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br><span class="line">        )</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre>
+
+<p>子组件接收数据</p>
+<pre class="highlight"><span class="line"><span class="keyword">function</span> <span class="title function_">Child</span>(<span class="params">props</span>) &#123;</span><br><span class="line">	<span class="keyword">return</span> <span class="language-xml"><span class="tag">&lt;<span class="name">div</span>&gt;</span>子组件接收到数据：&#123;props.name&#125;<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br><span class="line">&#125;</span><br></pre>
+
+<h3 id="评论列表案例"><a href="#评论列表案例" class="headerlink" title="评论列表案例"></a>评论列表案例</h3><h3 id="子传父"><a href="#子传父" class="headerlink" title="子传父"></a>子传父</h3><p>思路：利用回调函数，父组件提供回调，子组件调用，将要传递的数据作为回调函数的参数。</p>
+<ol>
+<li>父组件提供一个回调函数（用于接收数据）</li>
+<li>将该函数作为属性的值，传递给子组件</li>
+<li>子组件通过 props 调用回调函数</li>
+<li>将子组件的数据作为参数传递给回调函数</li>
+</ol>
+<p>父组件提供函数并且传递给字符串</p>
+<pre class="highlight"><span class="line"><span class="keyword">class</span> <span class="title class_">Parent</span> <span class="keyword">extends</span> <span class="title class_ inherited__">React.Component</span> &#123;</span><br><span class="line">    getChildMsg = <span class="function">(<span class="params">msg</span>) =&gt;</span> &#123;</span><br><span class="line">        <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;接收到子组件数据&#x27;</span>, msg)</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="title function_">render</span>(<span class="params"></span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> (</span><br><span class="line">            <span class="language-xml"><span class="tag">&lt;<span class="name">div</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">            	子组件：<span class="tag">&lt;<span class="name">Child</span> <span class="attr">getMsg</span>=<span class="string">&#123;this.getChildMsg&#125;</span> /&gt;</span></span></span><br><span class="line"><span class="language-xml">            <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br><span class="line">        )</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre>
+
+
+
+<p>子组件接收函数并且调用</p>
+<pre class="highlight"><span class="line"><span class="keyword">class</span> <span class="title class_">Child</span> <span class="keyword">extends</span> <span class="title class_ inherited__">React.Component</span> &#123;</span><br><span class="line">    state = &#123; <span class="attr">childMsg</span>: <span class="string">&#x27;React&#x27;</span> &#125;</span><br><span class="line">    handleClick = <span class="function">() =&gt;</span> &#123;</span><br><span class="line">    	<span class="variable language_">this</span>.<span class="property">props</span>.<span class="title function_">getMsg</span>(<span class="variable language_">this</span>.<span class="property">state</span>.<span class="property">childMsg</span>)</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> (</span><br><span class="line">    	<span class="language-xml"><span class="tag">&lt;<span class="name">button</span> <span class="attr">onClick</span>=<span class="string">&#123;this.handleClick&#125;</span>&gt;</span>点我，给父组件传递数据<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span></span><br><span class="line">    )</span><br><span class="line">&#125;</span><br></pre>
+
+<p><strong>注意：回调函数中 this 指向问题！</strong></p>
+<h3 id="兄弟组件"><a href="#兄弟组件" class="headerlink" title="兄弟组件"></a>兄弟组件</h3><ul>
+<li>将共享状态提升到最近的公共父组件中，由公共父组件管理这个状态</li>
+<li>思想：<strong>状态提升</strong></li>
+<li>公共父组件职责：<ul>
+<li>提供共享状态 </li>
+<li>提供操作共享状态的方法</li>
+</ul>
+</li>
+<li>要通讯的子组件只需通过 props 接收状态或操作状态的方法</li>
+</ul>
+<p>状态提升前</p>
+<p><img  srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="images/%E7%8A%B6%E6%80%81%E6%8F%90%E5%8D%8701.png" class="lozad post-image"src="images/%E7%8A%B6%E6%80%81%E6%8F%90%E5%8D%8701.png"></p>
+<p>状态提升之后</p>
+<p><img  srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="images/%E7%8A%B6%E6%80%81%E6%8F%90%E5%8D%8702.png" class="lozad post-image"src="images/%E7%8A%B6%E6%80%81%E6%8F%90%E5%8D%8702.png"></p>
+<h2 id="组件通讯-context"><a href="#组件通讯-context" class="headerlink" title="组件通讯-context"></a>组件通讯-context</h2><h3 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h3><p>思考：App 组件要传递数据给 Child 组件，该如何处理？</p>
+<p><img  srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="images/context01.png" class="lozad post-image"src="images/context01.png"></p>
+<p>处理方式：使用 props 一层层组件往下传递（繁琐）</p>
+<p>更好的姿势：使用 Context</p>
+<p> 作用：跨组件传递数据（比如：主题、语言等）</p>
+<p><img  srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="images/context02.png" class="lozad post-image"src="images/context02.png"></p>
+<h3 id="实现思路"><a href="#实现思路" class="headerlink" title="实现思路"></a>实现思路</h3><ul>
+<li>调用 React. createContext() 创建 Provider（提供数据） 和 Consumer（消费数据） 两个组件。</li>
+</ul>
+<pre class="highlight"><span class="line"><span class="keyword">const</span> &#123; <span class="title class_">Provider</span>, <span class="title class_">Consumer</span> &#125; = <span class="title class_">React</span>.<span class="title function_">createContext</span>()</span><br></pre>
+
+<ul>
+<li>使用 Provider 组件作为父节点。</li>
+</ul>
+<pre class="highlight"><span class="line">&lt;<span class="title class_">Provider</span>&gt;</span><br><span class="line">    <span class="language-xml"><span class="tag">&lt;<span class="name">div</span> <span class="attr">className</span>=<span class="string">&quot;App&quot;</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">    	<span class="tag">&lt;<span class="name">Child1</span> /&gt;</span></span></span><br><span class="line"><span class="language-xml">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br><span class="line">&lt;/<span class="title class_">Provider</span>&gt;</span><br></pre>
+
+<ul>
+<li>设置 value 属性，表示要传递的数据。</li>
+</ul>
+<pre class="highlight"><span class="line">&lt;<span class="title class_">Provider</span> value=<span class="string">&quot;pink&quot;</span>&gt;</span><br></pre>
+
+<ul>
+<li>调用 Consumer 组件接收数据。</li>
+</ul>
+<pre class="highlight"><span class="line">&lt;<span class="title class_">Consumer</span>&gt;</span><br><span class="line">	&#123;<span class="function"><span class="params">data</span> =&gt;</span> <span class="language-xml"><span class="tag">&lt;<span class="name">span</span>&gt;</span>data参数表示接收到的数据 -- &#123;data&#125;<span class="tag">&lt;/<span class="name">span</span>&gt;</span></span>&#125;</span><br><span class="line">&lt;/<span class="title class_">Consumer</span>&gt;</span><br></pre>
+
+<p>总结：</p>
+<ol>
+<li>如果两个组件是远方亲戚（比如，嵌套多层）可以使用Context实现组件通讯</li>
+<li>Context提供了两个组件：Provider 和 Consumer</li>
+<li>Provider组件：用来提供数据</li>
+<li>Consumer组件：用来消费数据</li>
+</ol>
+<h2 id="redux"><a href="#redux" class="headerlink" title="redux"></a>redux</h2><h1 id="props深入"><a href="#props深入" class="headerlink" title="props深入"></a>props深入</h1><h2 id="children属性"><a href="#children属性" class="headerlink" title="children属性"></a>children属性</h2><p>children属性：表示该组件的子节点，只要组件有子节点，props就有该属性</p>
+<p>children 属性与普通的props一样，值可以是任意值（文本、React元素、组件，甚至是函数）</p>
+<pre class="highlight"><span class="line"><span class="keyword">function</span> <span class="title function_">Hello</span>(<span class="params">props</span>) &#123;</span><br><span class="line">  <span class="keyword">return</span> (</span><br><span class="line">    <span class="language-xml"><span class="tag">&lt;<span class="name">div</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">      该组件的子节点：&#123;props.children&#125;</span></span><br><span class="line"><span class="language-xml">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br><span class="line">  )</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&lt;<span class="title class_">Hello</span>&gt;我是子节点&lt;/<span class="title class_">Hello</span>&gt;</span><br><span class="line"></span><br></pre>
+
+<h2 id="props校验"><a href="#props校验" class="headerlink" title="props校验"></a>props校验</h2><p>目的：校验接收的props的数据类型，增加组件的健壮性</p>
+<p>对于组件来说，props是外来的，无法保证组件使用者传入什么格式的数据</p>
+<p>如果传入的数据格式不对，可能会导致组件内部报错。<strong>组件的使用者不能很明确的知道错误的原因。</strong></p>
+<p><img  srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="images/props%E6%A0%A1%E9%AA%8C.png" class="lozad post-image"src="images/props%E6%A0%A1%E9%AA%8C.png"></p>
+<p>props校验允许在创建组件的时候，就约定props的格式、类型等</p>
+<p><img  srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="images/props%E6%A0%A1%E9%AA%8C02.png" class="lozad post-image"src="images/props%E6%A0%A1%E9%AA%8C02.png"></p>
+<p>作用：规定接收的props的类型必须为数组，如果不是数组就会报错，增加组件的健壮性。</p>
+<p><img  srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="images/props%E6%A0%A1%E9%AA%8C03.png" class="lozad post-image"src="images/props%E6%A0%A1%E9%AA%8C03.png"></p>
+<h3 id="使用步骤"><a href="#使用步骤" class="headerlink" title="使用步骤"></a>使用步骤</h3><ol start="2">
+<li>导入 prop-types 包</li>
+<li>使用组件名.propTypes = {} 来给组件的props添加校验规则</li>
+<li>校验规则通过 PropTypes 对象来指定</li>
+</ol>
+<pre class="highlight"><span class="line"><span class="keyword">import</span> <span class="title class_">PropTypes</span> <span class="keyword">from</span> <span class="string">&#x27;prop-types&#x27;</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">App</span>(<span class="params">props</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> (</span><br><span class="line">    	<span class="language-xml"><span class="tag">&lt;<span class="name">h1</span>&gt;</span>Hi, &#123;props.colors&#125;<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span></span><br><span class="line">    )</span><br><span class="line">&#125;</span><br><span class="line"><span class="title class_">App</span>.<span class="property">propTypes</span> = &#123;</span><br><span class="line">    <span class="comment">// 约定colors属性为array类型</span></span><br><span class="line">    <span class="comment">// 如果类型不对，则报出明确错误，便于分析错误原因</span></span><br><span class="line">    <span class="attr">colors</span>: <span class="title class_">PropTypes</span>.<span class="property">array</span></span><br><span class="line">&#125;</span><br></pre>
+
+<h3 id="约束规则"><a href="#约束规则" class="headerlink" title="约束规则"></a>约束规则</h3><ol>
+<li>常见类型：array、bool、func、number、object、string</li>
+<li>React元素类型：element</li>
+<li>必填项：isRequired</li>
+<li>特定结构的对象：shape({})</li>
+</ol>
+<pre class="highlight"><span class="line"><span class="comment">// 常见类型</span></span><br><span class="line"><span class="attr">optionalFunc</span>: <span class="title class_">PropTypes</span>.<span class="property">func</span>,</span><br><span class="line"><span class="comment">// 必选</span></span><br><span class="line"><span class="attr">requiredFunc</span>: <span class="title class_">PropTypes</span>.<span class="property">func</span>.<span class="property">isRequired</span>,</span><br><span class="line"><span class="comment">// 特定结构的对象</span></span><br><span class="line"><span class="attr">optionalObjectWithShape</span>: <span class="title class_">PropTypes</span>.<span class="title function_">shape</span>(&#123;</span><br><span class="line">	<span class="attr">color</span>: <span class="title class_">PropTypes</span>.<span class="property">string</span>,</span><br><span class="line">	<span class="attr">fontSize</span>: <span class="title class_">PropTypes</span>.<span class="property">number</span></span><br><span class="line">&#125;)</span><br></pre>
+
+
+
+<h2 id="props默认值"><a href="#props默认值" class="headerlink" title="props默认值"></a>props默认值</h2><p>场景：分页组件  每页显示条数<br>作用：给 props 设置默认值，在未传入 props 时生效</p>
+<pre class="highlight"><span class="line"><span class="keyword">function</span> <span class="title function_">App</span>(<span class="params">props</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> (</span><br><span class="line">        <span class="language-xml"><span class="tag">&lt;<span class="name">div</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">            此处展示props的默认值：&#123;props.pageSize&#125;</span></span><br><span class="line"><span class="language-xml">        <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br><span class="line">    )</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 设置默认值</span></span><br><span class="line"><span class="title class_">App</span>.<span class="property">defaultProps</span> = &#123;</span><br><span class="line">	<span class="attr">pageSize</span>: <span class="number">10</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 不传入pageSize属性</span></span><br><span class="line">&lt;<span class="title class_">App</span> /&gt;</span><br></pre>
+
+
+
+<h2 id="类的静态属性static"><a href="#类的静态属性static" class="headerlink" title="类的静态属性static"></a>类的静态属性static</h2><ul>
+<li><p>实例成员: 通过实例调用的属性或者方法，，，叫做实例成员（属性或者方法）</p>
+</li>
+<li><p>静态成员：通过类或者构造函数本身才能访问的属性或者方法</p>
+</li>
+</ul>
+<pre class="highlight"><span class="line"><span class="keyword">class</span> <span class="title class_">Person</span> &#123;</span><br><span class="line">   name = <span class="string">&#x27;zs&#x27;</span>,</span><br><span class="line">   <span class="keyword">static</span> age = <span class="number">18</span></span><br><span class="line">   <span class="title function_">sayHi</span>(<span class="params"></span>) &#123;</span><br><span class="line">       <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;哈哈&#x27;</span>)</span><br><span class="line">   &#125;</span><br><span class="line">   <span class="keyword">static</span> <span class="title function_">goodBye</span>(<span class="params"></span>) &#123;</span><br><span class="line">       <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;byebye&#x27;</span>)</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> p = <span class="keyword">new</span> <span class="title class_">Person</span>()</span><br><span class="line"></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(p.<span class="property">name</span>)</span><br><span class="line">p.<span class="title function_">sayHi</span>()</span><br><span class="line"></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="title class_">Person</span>.<span class="property">age</span>)</span><br><span class="line"><span class="title class_">Person</span>.<span class="title function_">goodBye</span>()</span><br></pre>
+
+
+  </div>
+  <div>
+    
+      <div 
+        class="post-note note-warning copyright" 
+        style="margin-top: 42px">
+        <p>
+          <span style="font-weight: bold;">作者：</span><a 
+            target="_blank" 
+            rel="nofollow noopener noreferrer" 
+            href="/about">
+            theme-kaze
+          </a>
+        </p>
+        <p>
+          <span style="font-weight: bold;">文章链接：</span><a 
+            target="_blank" 
+            rel="nofollow noopener noreferrer" 
+            href="http://example.com/2023/04/24/03-%E7%BB%84%E4%BB%B6%E9%80%9A%E8%AE%AF/">
+            http://example.com/2023/04/24/03-%E7%BB%84%E4%BB%B6%E9%80%9A%E8%AE%AF/
+          </a>
+        </p>
+        <p><span style="font-weight: bold;">版权声明：</span>本博客所有文章除特别声明外，均采用<a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">CC BY-NC-SA 4.0 协议</a>。转载请注明出处！</p>
+      </div>
+    
+  </div>
+</article>
+<div class="nav">
+  
+    <div class="nav-item-prev">
+      <a 
+        href="/2023/04/24/04-%E7%BB%84%E4%BB%B6%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F/" 
+        class="nav-link">
+        <i class="iconfont icon-left nav-prev-icon"></i>
+        <div>
+          <div class="nav-label">上一篇</div>
+          
+            <div class="nav-title">组件生命周期 </div>
+          
+        </div>
+      </a>
+    </div>
+  
+  
+    <div class="nav-item-next">
+      <a 
+        href="/2023/04/24/02-%E7%BB%84%E4%BB%B6%E5%9F%BA%E7%A1%80/" 
+        class="nav-link">
+        <div>
+          <div class="nav-label">下一篇</div>
+          
+            <div class="nav-title">组件基本介绍 </div>
+          
+        </div>
+        <i class="iconfont icon-right nav-next-icon"></i>
+      </a>
+    </div>
+  
+</div>
+
+<div 
+  class="card card-content toc-card" 
+  id="mobiletoc">
+  <div class="toc-header">
+  <i 
+    class="iconfont icon-menu" 
+    style="padding-right: 2px;">
+  </i>目录
+</div>
+<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%AD%A6%E4%B9%A0%E7%9B%AE%E6%A0%87"><span class="toc-text">学习目标</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%BB%84%E4%BB%B6%E9%80%9A%E8%AE%AF"><span class="toc-text">组件通讯</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#props"><span class="toc-text">props</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%87%BD%E6%95%B0%E7%BB%84%E4%BB%B6%E9%80%9A%E8%AE%AF"><span class="toc-text">函数组件通讯</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%B1%BB%E7%BB%84%E4%BB%B6%E9%80%9A%E8%AE%AF"><span class="toc-text">类组件通讯</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#props%E7%9A%84%E7%89%B9%E7%82%B9"><span class="toc-text">props的特点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BB%84%E4%BB%B6%E9%80%9A%E8%AE%AF%E4%B8%89%E7%A7%8D%E6%96%B9%E5%BC%8F"><span class="toc-text">组件通讯三种方式</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%88%B6%E4%BC%A0%E5%AD%90"><span class="toc-text">父传子</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AF%84%E8%AE%BA%E5%88%97%E8%A1%A8%E6%A1%88%E4%BE%8B"><span class="toc-text">评论列表案例</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AD%90%E4%BC%A0%E7%88%B6"><span class="toc-text">子传父</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%84%E5%BC%9F%E7%BB%84%E4%BB%B6"><span class="toc-text">兄弟组件</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BB%84%E4%BB%B6%E9%80%9A%E8%AE%AF-context"><span class="toc-text">组件通讯-context</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5"><span class="toc-text">基本概念</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%9E%E7%8E%B0%E6%80%9D%E8%B7%AF"><span class="toc-text">实现思路</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#redux"><span class="toc-text">redux</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#props%E6%B7%B1%E5%85%A5"><span class="toc-text">props深入</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#children%E5%B1%9E%E6%80%A7"><span class="toc-text">children属性</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#props%E6%A0%A1%E9%AA%8C"><span class="toc-text">props校验</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E6%AD%A5%E9%AA%A4"><span class="toc-text">使用步骤</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BA%A6%E6%9D%9F%E8%A7%84%E5%88%99"><span class="toc-text">约束规则</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#props%E9%BB%98%E8%AE%A4%E5%80%BC"><span class="toc-text">props默认值</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%B1%BB%E7%9A%84%E9%9D%99%E6%80%81%E5%B1%9E%E6%80%A7static"><span class="toc-text">类的静态属性static</span></a></li></ol></li></ol>
+</div>
+            </main>
+            <aside class="right-column">
+              <div class="sticky-widescreen">
+  
+  
+    <article class="card card-content toc-card">
+      <div class="toc-header">
+  <i 
+    class="iconfont icon-menu" 
+    style="padding-right: 2px;">
+  </i>目录
+</div>
+<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%AD%A6%E4%B9%A0%E7%9B%AE%E6%A0%87"><span class="toc-text">学习目标</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%BB%84%E4%BB%B6%E9%80%9A%E8%AE%AF"><span class="toc-text">组件通讯</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#props"><span class="toc-text">props</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%87%BD%E6%95%B0%E7%BB%84%E4%BB%B6%E9%80%9A%E8%AE%AF"><span class="toc-text">函数组件通讯</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%B1%BB%E7%BB%84%E4%BB%B6%E9%80%9A%E8%AE%AF"><span class="toc-text">类组件通讯</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#props%E7%9A%84%E7%89%B9%E7%82%B9"><span class="toc-text">props的特点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BB%84%E4%BB%B6%E9%80%9A%E8%AE%AF%E4%B8%89%E7%A7%8D%E6%96%B9%E5%BC%8F"><span class="toc-text">组件通讯三种方式</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%88%B6%E4%BC%A0%E5%AD%90"><span class="toc-text">父传子</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AF%84%E8%AE%BA%E5%88%97%E8%A1%A8%E6%A1%88%E4%BE%8B"><span class="toc-text">评论列表案例</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AD%90%E4%BC%A0%E7%88%B6"><span class="toc-text">子传父</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%84%E5%BC%9F%E7%BB%84%E4%BB%B6"><span class="toc-text">兄弟组件</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BB%84%E4%BB%B6%E9%80%9A%E8%AE%AF-context"><span class="toc-text">组件通讯-context</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5"><span class="toc-text">基本概念</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%9E%E7%8E%B0%E6%80%9D%E8%B7%AF"><span class="toc-text">实现思路</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#redux"><span class="toc-text">redux</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#props%E6%B7%B1%E5%85%A5"><span class="toc-text">props深入</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#children%E5%B1%9E%E6%80%A7"><span class="toc-text">children属性</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#props%E6%A0%A1%E9%AA%8C"><span class="toc-text">props校验</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E6%AD%A5%E9%AA%A4"><span class="toc-text">使用步骤</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BA%A6%E6%9D%9F%E8%A7%84%E5%88%99"><span class="toc-text">约束规则</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#props%E9%BB%98%E8%AE%A4%E5%80%BC"><span class="toc-text">props默认值</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%B1%BB%E7%9A%84%E9%9D%99%E6%80%81%E5%B1%9E%E6%80%A7static"><span class="toc-text">类的静态属性static</span></a></li></ol></li></ol>
+    </article>
+  
+  
+  <article class="card card-content">
+    <div class="recent-posts-card">
+  <div class="recent-posts-header">
+    <i 
+      class="iconfont icon-wenzhang_huaban" 
+      style="padding-right: 2px;">
+    </i>最近文章
+  </div>
+  <div class="recent-posts-list">
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2023-04-24</div>
+        <a href="/2023/04/24/js%E5%BC%82%E6%AD%A5%E5%A4%84%E7%90%86%E6%96%B9%E6%A1%88%EF%BC%8Cjs%E7%9A%84%E5%BC%82%E6%AD%A5%E4%B8%B2%E8%A1%8C%E4%B8%8E%E5%BC%82%E6%AD%A5%E5%B9%B6%E8%A1%8C/"><div class="recent-posts-item-content">js的异步串行与异步并行</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2023-04-24</div>
+        <a href="/2023/04/24/03-hooks%E8%BF%9B%E9%98%B6/"><div class="recent-posts-item-content">hooks进阶</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2023-04-24</div>
+        <a href="/2023/04/24/02-hooks%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/"><div class="recent-posts-item-content">hooks基本使用</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2023-04-24</div>
+        <a href="/2023/04/24/01-react-%E7%BB%84%E4%BB%B6%E5%A4%8D%E7%94%A8/"><div class="recent-posts-item-content">组件复用的说明</div></a>
+      </div>
+    
+  </div>
+</div>
+  </article>
+  
+  
+</div>
+            </aside>
+          </div>
+        </div>
+      </div>
+    </div>
+     
+    <footer class="footer">
+  <div class="footer-container">
+    <div>
+      <div class="footer-dsc">
+        <span>
+          Copyright ©
+          
+            2020
+          
+          
+                - 
+                2023
+          
+        </span>
+        &nbsp;
+        <a 
+          href="/" 
+          class="footer-link">
+          Theme Kaze
+        </a>
+      </div>
+    </div>
+
+    
+      <div class="footer-dsc">
+        
+          Powered by
+          <a 
+            href="https://hexo.io/" 
+            class="footer-link" 
+            target="_blank" 
+            rel="nofollow noopener noreferrer">
+            &nbsp;Hexo
+          </a>
+        
+        
+          <span>&nbsp;|&nbsp;</span>
+        
+        
+          Theme -
+          <a 
+            href="https://github.com/theme-kaze" 
+            class="footer-link" 
+            target="_blank"
+            rel="nofollow noopener noreferrer">
+            &nbsp;Kaze
+          </a>
+        
+      </div>
+    
+    
+    
+    
+</footer>
+ 
+    
+  <a 
+    role="button" 
+    id="scrollbutton" 
+    class="basebutton" 
+    aria-label="回到顶部">
+    <i class="iconfont icon-arrowleft button-icon"></i>
+  </a>
+
+<a 
+  role="button" 
+  id="menubutton"
+  aria-label="menu button"
+  class="basebutton">
+  <i class="iconfont icon-menu button-icon"></i>
+</a>
+<a 
+  role="button" 
+  id="popbutton" 
+  class="basebutton" 
+  aria-label="控制中心">
+  <i class="iconfont icon-expand button-icon"></i>
+</a>
+<a 
+  role="button" 
+  id="darkbutton" 
+  class="basebutton darkwidget" 
+  aria-label="夜色模式">
+  <i class="iconfont icon-weather button-icon"></i>
+</a>
+<a 
+  role="button" 
+  id="searchbutton" 
+  class="basebutton searchwidget" 
+  aria-label="搜索">
+  <i class="iconfont icon-search button-icon"></i>
+</a> 
+     
+     
+     
+      <script>
+  var addImgLayout = function () {
+    var img = document.querySelectorAll('.post-content img')
+    var i
+    for (i = 0; i < img.length; i++) {
+      var wrapper = document.createElement('a')
+      wrapper.setAttribute('href', img[i].getAttribute('data-src'))
+      wrapper.setAttribute('aria-label', 'illustration')
+      wrapper.style.cssText =
+        'width: 100%; display: flex; justify-content: center;'
+      if (img[i].alt) wrapper.dataset.caption = img[i].alt
+      wrapper.dataset.nolink = true
+      img[i].before(wrapper)
+      wrapper.append(img[i])
+      var divWrap = document.createElement('div')
+      divWrap.classList.add('gallery')
+      wrapper.before(divWrap)
+      divWrap.append(wrapper)
+    }
+    baguetteBox.run('.gallery')
+  }
+</script>
+<script>
+  loadScript(
+    "/js/lib/lightbox/baguetteBox.min.js",
+    addImgLayout
+  )
+</script>
+ 
+     
+     
+    <script src="/js/main.js"></script> 
+     
+    
+      <script>
+        var addLazyload = function () {
+          var observer = lozad('.lozad', {
+            load: function (el) {
+              el.srcset = el.getAttribute('data-src')
+            },
+            loaded: function (el) {
+              el.classList.add('loaded')
+            },
+          })
+          observer.observe()
+        }
+      </script>
+      <script>
+        loadScript('/js/lib/lozad.min.js', addLazyload)
+      </script>
+    
+    <script src="//instant.page/5.1.0" type="module"
+      integrity="sha384-by67kQnR+pyfy8yWP4kPO12fHKRLHZPfEsiSXR8u2IKcTdxD805MGUXBzVPnkLHw"></script>
+    
+    
+  </body>
+</html>
